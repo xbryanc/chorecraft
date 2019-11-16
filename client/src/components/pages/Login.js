@@ -32,16 +32,13 @@ export default class Login extends Component {
             isParent: this.props.isParent,
         })
         .then(res => {
-            console.log("res");
             console.log(res);
             if (res.data.redirect) {
                 window.location = res.data.redirect;
             }
         })
         .catch((err) => {
-            alert("err");
-            console.log("err");
-            console.log(err.response);
+            alert(err.response.data.message);
         })
     }
 
