@@ -40,7 +40,22 @@ router.post('/createQuest',
 router.post('/completeQuest',
     connect.ensureLoggedIn(),
     function(req, res) {
-        //
+        if (req.user.isParent) {
+            const questId = req.body.quest;
+            const childId = req.body.child;
+            Quest.findOne({_id: questId}, quest => {
+                Child.findOne({_id: childId}, child => {
+                    child.exp += quest.exp;
+                    child.coins += quest.coins;
+                    Child.findOneAndUpdate({_id: childId}, child, _ => {
+                        res.send({done: true});
+                    })
+                });
+            });
+        } else {
+            res.status(403);
+            res.send({done: false});
+        }
 });
 
 router.get('/echo', function(req, res) {
