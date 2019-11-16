@@ -65,7 +65,7 @@ router.get('/echo', function(req, res) {
 });
 
 router.post('/signup', function(req, res, next) {
-    passport.authenticate('signup'),
+    passport.authenticate('signup');
     
 });
 
