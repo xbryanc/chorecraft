@@ -42,7 +42,7 @@ export default class Login extends Component {
                 window.location = res.data.redirect;
             }
         }).catch((err) => {
-            alert(err);
+            alert(err.response.data.message);
         })
     }
 
