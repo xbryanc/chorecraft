@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../../css/app.css';
 import '../../css/root.css';
 
-export default class Login extends Component {
+export default class Signup extends Component {
     constructor(props) {
         super(props);
 
@@ -12,8 +12,7 @@ export default class Login extends Component {
             password: "",
         };
 
-        this.handleUsernameChange = this.handleUsernameChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.handleSignup = this.handleSignup.bind(this);
     }
 
@@ -21,14 +20,8 @@ export default class Login extends Component {
         document.title = "Questmaster Signup - Chorecraft";
     }
 
-    handleUsernameChange(e) {
-        console.log("value");
-        console.log(e.target.value);
-        this.setState({username: e.target.value});
-    }
-
-    handlePasswordChange(e) {
-        this.setState({password: e.target.value});
+    handleChange(e) {
+        this.setState({[e.target.name]: e.target.value});
     }
 
     handleSignup() {
@@ -36,7 +29,6 @@ export default class Login extends Component {
             username: this.state.username,
             password: this.state.password,
         }).then((res) => {
-            console.log("res");
             console.log(res);
             if (res.data.redirect) {
                 window.location = res.data.redirect;
@@ -52,11 +44,11 @@ export default class Login extends Component {
                 <form>
                     <div>
                         <label>Username:</label>
-                        <input type="text" name="username" value={this.state.username} onChange={this.handleUsernameChange} />
+                        <input type="text" name="username" value={this.state.username} onChange={this.handleChange} />
                     </div>
                     <div>
                         <label>Password:</label>
-                        <input type="password" name="password" value={this.state.password} onChange={this.handlePasswordChange} />
+                        <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
                     </div>
                     <button type="button" onClick={this.handleSignup}>Sign up</button>
                 </form>

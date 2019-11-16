@@ -69,7 +69,21 @@ router.post('/signup', function(req, res, next) {
     passport.authenticate('signup', function(e, user, info) {
         if(e) return next(e);
         if(info) return res.status(400).send(info);
-        return res.status(200).send({ redirect: '/home' });
+        req.login(user, function(e) {
+            if(e) { return next(e); }
+            return res.status(200).send({ redirect: '/home' });
+        });
+    })(req, res, next);
+});
+
+router.post('/login', function(req, res, next) {
+    passport.authenticate('login', function(e, user, info) {
+        if(e) return next(e);
+        if(info) return res.status(400).send(info);
+        req.login(user, function(e) {
+            if(e) { return next(e); }
+            return res.status(200).send({ redirect: '/home' });
+        });
     })(req, res, next);
 });
 
@@ -100,13 +114,6 @@ router.get('/whoami', function(req, res) {
     } else {
         res.send("not logged in");
     }
-})
-
-router.post('/login', 
-    passport.authenticate('login'),
-    function(req, res) {
-        res.send('logged in!');
-    }
-);
+});
 
 module.exports = router;

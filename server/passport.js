@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const Parent = require('./models/Parent');
 const Child = require('./models/Child');
 
-function processUser(err, user, password, isParent, done) {
+function processUser(err, user, password, isParent, req, done) {
     if (err) { return done(err); }
     if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
@@ -21,11 +21,11 @@ passport.use('login', new LocalStrategy({
     function (req, username, password, done) {
         if (req.body.isParent) {
             Parent.findOne({ username: username }, function(err, user) {
-                return processUser(err, user, password, true, done);
+                return processUser(err, user, password, true, req, done);
             });
         } else {
             Child.findOne({ username: username }, function(err, user) {
-                return processUser(err, user, password, false, done);
+                return processUser(err, user, password, false, req, done);
             })
         }
     }
