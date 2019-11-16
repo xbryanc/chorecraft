@@ -7,7 +7,7 @@ const ChildSchema = new mongoose.Schema ({
     password: String,
     exp: Number,
     coins: Number,
-    childrenId: [mongoose.Schema.Types.ObjectId],
+    parentId: mongoose.Schema.Types.ObjectId,
 });
 
 module.exports = mongoose.model('Child', ChildSchema);

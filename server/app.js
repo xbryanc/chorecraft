@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const express = require('express');
 const path = require('path');
+const flash = require('connect-flash');
 
 // env setup
 require('dotenv').config();
@@ -28,11 +29,16 @@ app.use(session({
   saveUninitialized: 'true'
 }));
 
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(publicPath));
 
 app.use('/api', api);
 
-app.get('/', function (req, res) {
+app.get('/*', function (req, res) {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
