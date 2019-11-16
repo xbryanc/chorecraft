@@ -1,7 +1,7 @@
 {
-  "name": "starter_react_app",
+  "name": "chorecraft",
   "version": "1.0.0",
-  "description": "starter_react_app",
+  "description": "chorecraft",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xbryanc/starter_react_app.git"
+    "url": "git+https://github.com/xbryanc/chorecraft.git"
   },
   "author": "Bryan Chen",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/xbryanc/starter_react_app/issues"
+    "url": "https://github.com/xbryanc/chorecraft/issues"
   },
-  "homepage": "https://github.com/xbryanc/starter_react_app#readme",
+  "homepage": "https://github.com/xbryanc/chorecraft#readme",
   "devDependencies": {
     "@babel/preset-react": "^7.0.0",
     "babel-cli": "^6.26.0",
