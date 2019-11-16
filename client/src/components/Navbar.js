@@ -25,7 +25,7 @@ export default class Navbar extends Component {
                     </div>
                 }
                 { !this.state.loggedIn ? null : 
-                    <Link to="/api/logout">Log Out</Link>
+                    <a href="/api/logout">Log Out</a>
                 }
             </div>
         );
