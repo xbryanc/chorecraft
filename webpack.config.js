@@ -54,7 +54,7 @@ module.exports = {
     contentBase: './client/public',
     hot: true,
     proxy: {
-      '/': 'http://localhost:3000',
+      '**': 'http://localhost:3000',
     }
   }
 };

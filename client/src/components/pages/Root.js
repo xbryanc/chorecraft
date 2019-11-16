@@ -12,7 +12,7 @@ export default class Root extends Component {
     }
 
     componentDidMount() {
-        document.title = "Welcome!";
+        document.title = "Chorecraft";
     }
     
     render() {

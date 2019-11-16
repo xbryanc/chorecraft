@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import '../../css/App.css';
+import '../../css/app.css';
 import '../../css/root.css';
 
 export default class Login extends Component {
@@ -18,7 +18,7 @@ export default class Login extends Component {
     }
 
     componentDidMount() {
-        document.title = "Questmaster Login - Chorecraft";
+        document.title = this.state.isParent ? "Questmaster" : "Explorer" + " Login - Chorecraft";
     }
 
     handleChange(e) {
