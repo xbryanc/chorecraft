@@ -11,4 +11,4 @@ const QuestModelSchema = new mongoose.Schema ({
     childrenId: [mongoose.Schema.Types.ObjectId],
 });
 
-module.exports = mongoose.model('QuestModel', QuestModelSchema);
+module.exports = mongoose.model('Quest', QuestModelSchema);
