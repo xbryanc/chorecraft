@@ -131,9 +131,15 @@ router.get('/whoami', function(req, res) {
                 });
             });
         } else {
-            res.send({
-                username: req.user.username,
-                isParent: req.user.isParent,
+            Child.find({_id: req.user._id}, child => {
+                Parent.find({_id: child.parentId}, parent => {
+                    res.send({
+                        username: req.user.username,
+                        isParent: false,
+                        parentId: child.parentId,
+                        parentName: parent.username,
+                    });
+                })
             });
         }
     } else {

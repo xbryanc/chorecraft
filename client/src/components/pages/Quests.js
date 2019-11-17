@@ -23,36 +23,43 @@ export default class Quests extends Component {
                 <div className="questsTitle">
                     Quests
                 </div>
-                {this.props.userInfo.isParent && this.props.userInfo.children.length ?
-                (
-                    <div>
-                        <div className="questsCreateTitle">
-                            Make a new quest!
+                {this.props.userInfo.isParent ?
+                    this.props.userInfo.children.length ?
+                    (
+                        <div>
+                            <div className="questsCreateTitle">
+                                Make a new quest!
+                            </div>
+                            {[["Title", "text"], ["Description", "text"], ["Exp", "number"], ["Coins", "number"]].map(cur => {
+                                let el = cur[0];
+                                let type = cur[1];
+                                return (
+                                    <div className="questsCreateField">
+                                        <label htmlFor={`quests${el}`}>{el}</label>
+                                        <input id={`quests${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState}></input>
+                                    </div>
+                                );
+                            })}
+                            <div className="questsChildSelectionTitle">
+                                Select your questers!
+                            </div>
+                            {
+                                this.props.userInfo.childNames.forEach((el, ind) => (
+                                    <div className="questsChildSelection">
+                                        <input type="checkbox" value={this.props.userInfo.children[ind]} onClick={this.updateQuestChildren} />
+                                        <p> el</p>
+                                    </div>
+                                ))
+                            }
+                            <button onClick={this.createQuest}>Create!</button>
                         </div>
-                        {[["Title", "text"], ["Description", "text"], ["Exp", "number"], ["Coins", "number"]].map(cur => {
-                            let el = cur[0];
-                            let type = cur[1];
-                            return (
-                                <div className="questsCreateField">
-                                    <label htmlFor={`quests${el}`}>{el}</label>
-                                    <input id={`quests${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState}></input>
-                                </div>
-                            );
-                        })}
-                        <div className="questsChildSelectionTitle">
-                            Select your questers!
+                    )
+                    :
+                    (
+                        <div className="questsNeedChildren">
+                            You have no registered children. Please register them to create quests for them!
                         </div>
-                        {
-                            this.props.userInfo.childNames.forEach((el, ind) => (
-                                <div className="questsChildSelection">
-                                    <input type="checkbox" value={this.props.userInfo.children[ind]} onClick={this.updateQuestChildren} />
-                                    <p> el</p>
-                                </div>
-                            ))
-                        }
-                        <button onClick={this.createQuest}>Create!</button>
-                    </div>
-                )
+                    )
                 :
                 null
                 }
@@ -62,9 +69,23 @@ export default class Quests extends Component {
                 </p>
                 :
                 (
-                    <p>
-                        No quests found!
-                    </p>
+                    <div className="questsNoneFound">
+                        {Object.keys(this.props.userInfo).length ?
+                        <div>
+                            No quests found.
+                            {this.props.userInfo.isParent ?
+                            " You "
+                            :
+                            ` ${this.props.userInfo.parentName} `
+                            }
+                            should make some more!
+                        </div>
+                        :
+                        <div>
+                            Please log in to view quests.
+                        </div>
+                        }
+                    </div>
                 )}
             </div>
         )
