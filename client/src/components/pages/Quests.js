@@ -20,7 +20,7 @@ export default class Quests extends Component {
 
     render() {
         return (
-            <div>
+            <div className="backgroundContainer">
                 {this.props.userInfo.isParent ?
                     this.props.userInfo.children.length ?
                     (

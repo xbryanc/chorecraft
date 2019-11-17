@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
+import { Slide } from 'react-slideshow-image';
 import '../../css/app.css';
 import '../../css/root.css';
 
 export default class Root extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            message: ""
-        };
+        this.props.updateUserInfo();
     }
 
     componentDidMount() {
@@ -17,24 +15,51 @@ export default class Root extends Component {
     
     render() {
         return (
-            <div className="rootContainer">
-                <input name="message" type="text" onChange={this.updateField} />
-                <button onClick={this.sendHello}>Click to Send Hello</button>
+            <div className="rootContainer backgroundContainer">
+                <div className="rootTitle">
+                    Welcome to Chorecraft!
+                </div>
+                <div className="rootSlideContainer">
+                    <Slide className="rootSlideshow"
+                        duration={5000}
+                        transitionDuration={500}
+                        infinite={true}
+                        indicators={true}
+                        arrows={true}
+                    >
+                        {[
+                            ["/media/quest.jpg", "Browse quests to do."],
+                            ["/media/coins.png", "Earn coins by completing quests."],
+                            ["/media/redeem.jpeg", "Cash in coins for rewards!"],
+                            ["/media/exp.png", "Quests also reward exp for more benefits!"]
+                        ].map(slide =>
+                        <div className="rootSlide">
+                            <img className="rootSlideImage" src={slide[0]} />
+                            <div className="rootSlideInfo">
+                                {slide[1]}
+                            </div>
+                        </div>
+                        )}
+                    </Slide>
+                </div>
+                {Object.keys(this.props.userInfo).length ? null :
+                <div className="rootLoginButtons">
+                    <button type="button" className="btn btn-secondary rootLoginButton" onClick={() => this.redirect("/parent/signup")}>
+                        Questmaster Registration
+                    </button>
+                    <button type="button" className="btn btn-secondary rootLoginButton" onClick={() => this.redirect("/parent/login")}>
+                        Questmaster Login
+                    </button>
+                    <button type="button" className="btn btn-secondary rootLoginButton" onClick={() => this.redirect("/child/login")}>
+                        Explorer Login
+                    </button>
+                </div>
+                }
             </div>
         );
     }
 
-    updateField = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value,
-        });
-    }
-
-    sendHello = () => {
-        fetch(`/api/echo?message=${this.state.message}`)
-        .then(res => res.json())
-        .then(res => {
-            alert("Server says " + res.message);
-        })
+    redirect = (url) => {
+        window.location.href = url;
     }
 }

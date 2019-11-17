@@ -16,6 +16,7 @@ class App extends Component {
     
     this.state = {
       userInfo: {},
+      fetching: true,
     };
   }
 
@@ -26,9 +27,9 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar />
+        <Navbar userInfo={this.state.userInfo} />
         <Switch>
-          <Route exact path="/" component={Root} /> } />
+          <Route exact path="/" render={(props) => <Root {...props} userInfo={this.state.userInfo} updateUserInfo={this.getUserInfo} /> } />
           <Route exact path="/parent/login" render={(props) => <Login {...props} isParent={true} /> } />
           <Route exact path="/child/login" render={(props) => <Login {...props} isParent={false} /> } />
           <Route exact path="/parent/signup" component={Signup} /> } />
@@ -46,6 +47,7 @@ class App extends Component {
     .then(res => {
       this.setState({
         userInfo: res,
+        fetching: false,
       });
     })
   }

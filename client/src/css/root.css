@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'bebasNeue';
+    src: url('/media/BebasNeue-Regular.ttf') format('truetype');
+}
+
+.rootTitle {
+    text-align: center;
+    font-size: 40px;
+    font-family: bebasNeue, sans-serif;
+}
+
+.rootSlideContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.rootSlideshow {
+    width: 60vw;
+}
+
+.rootSlide {
+    text-align: center;
+}
+
+.rootSlideImage {
+    height: 40vh;
+}
+
+.rootSlideInfo {
+    margin-top: 10px;
+}
+
+.rootLoginButtons {
+    display: flex;
+    justify-content: center;
+}
+
+.rootLoginButton {
+    width: 300px;
+    margin: 20px;
+}

@@ -19,13 +19,13 @@ export default class Profile extends Component {
     render() {
         if (!Object.keys(this.props.userInfo).length) {
             return (
-                <div className="profileLogin">
+                <div className="profileLogin backgroundContainer">
                     Please log in to see profiles!
                 </div>
             )
         }
         return (
-            <div>
+            <div className="backgroundContainer">
                 Hi {this.props.userInfo.username}!
                 {this.props.userInfo.isParent ?
                 (

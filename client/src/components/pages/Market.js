@@ -16,7 +16,7 @@ export default class Market extends Component {
 
     render() {
         return (
-            <div>
+            <div className="backgroundContainer">
                 Hello.
             </div>
         )
