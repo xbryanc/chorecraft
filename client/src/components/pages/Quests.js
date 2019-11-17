@@ -21,15 +21,12 @@ export default class Quests extends Component {
     render() {
         return (
             <div>
-                <div className="questsHeader">
-                    Quests
-                </div>
                 {this.props.userInfo.isParent ?
                     this.props.userInfo.children.length ?
                     (
                         <div>
                             <div className="questsCreateTitle">
-                                Make a new quest!
+                                Craft a quest!
                             </div>
                             {[["Title", "text"], ["Description", "text"], ["Exp", "number"], ["Coins", "number"]].map(cur => {
                                 let el = cur[0];
@@ -45,10 +42,10 @@ export default class Quests extends Component {
                                 Select your explorers!
                             </div>
                             {
-                                this.props.userInfo.children.map((el, ind) => (
+                                this.props.userInfo.children.map(el => (
                                     <div className="questsChildSelection">
-                                        <input type="checkbox" value={el} onClick={this.updateQuestChildren} />
-                                        <p>{this.props.userInfo.childNames[ind]}</p>
+                                        <input type="checkbox" value={el._id} onClick={this.updateQuestChildren} />
+                                        <p>{el.username}</p>
                                     </div>
                                 ))
                             }
@@ -64,6 +61,9 @@ export default class Quests extends Component {
                 :
                 null
                 }
+                <div className="questsHeader">
+                    Quests
+                </div>
                 {this.state.quests && this.state.quests.length ?
                 this.state.quests.map(q => (
                     <div className="questsQuest">
@@ -79,6 +79,20 @@ export default class Quests extends Component {
                         <div className="questsCoints">
                             {q.coins} coins
                         </div>
+                        {this.props.userInfo.isParent ?
+                        <div className="questsChildrenAssigned">
+                            {
+                                q.childrenId.map(el => (
+                                    <div>
+                                        <input type="radio" onClick={() => this.completeQuest(q._id, el)} />
+                                        <p>{this.getChildName(el)}</p>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        :
+                        null
+                        }
                     </div>
                 ))
                 :
@@ -103,6 +117,35 @@ export default class Quests extends Component {
                 )}
             </div>
         )
+    }
+
+    completeQuest = (qid, cid) => {
+        let name = this.getChildName(cid);
+        let proceed = confirm(`Are you sure you want to complete this quest for ${name}?`);
+        if (!proceed) {
+            return;
+        }
+        axios.post('/api/completeQuest', {
+            quest: qid,
+            child: cid,
+        })
+        .then(res => {
+            if (res.data.done) {
+                alert("Completed quest!");
+            } else {
+                alert("Could not complete quest at this time.");
+            }
+        });
+    }
+
+    getChildName = (id) => {
+        let answer = "";
+        this.props.userInfo.children.forEach(el => {
+            if (el._id == id) {
+                answer = el.username;
+            }
+        })
+        return answer;
     }
 
     updateQuestChildren = (event) => {

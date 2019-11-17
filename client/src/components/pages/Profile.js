@@ -31,9 +31,9 @@ export default class Profile extends Component {
                 (
                     <div>
                         Current explorers:
-                            {this.props.userInfo.childNames.map(el =>
+                            {this.props.userInfo.children.map(el =>
                                 <p>
-                                    {el}
+                                    {el.username}: {el.exp} EXP, {el.coins} coins
                                 </p>
                             )}
                         Register an explorer!

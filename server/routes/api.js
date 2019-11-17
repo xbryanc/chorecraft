@@ -129,12 +129,16 @@ router.get('/whoami', function(req, res) {
         if (req.user.isParent) {
             Parent.findOne({_id: req.user._id}, (_, parent) => {
                 Child.find({_id: { $in: parent.childrenId }}, (_, children) => {
-                    let childNames = children.map(c => c.username)
+                    let childInfo = children.map(c => ({
+                        _id: c._id,
+                        username: c.username,
+                        exp: c.exp,
+                        coins: c.coins,
+                    }));
                     res.send({
                         username: req.user.username,
                         isParent: true,
-                        children: parent.childrenId,
-                        childNames: childNames,
+                        children: childInfo,
                     });
                 });
             })
