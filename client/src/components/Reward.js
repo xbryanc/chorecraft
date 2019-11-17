@@ -8,15 +8,15 @@ export default class Reward extends Component {
     }
 
     render() {
-        let reward = 0;
+        let reward = this.props.reward;
         let coinsNeeded = 0;
         let earningRate = 0;
         let subtext = "";
         if (!this.props.userInfo.isParent) {
-            reward = this.props.reward;
             coinsNeeded = reward.cost - this.props.userInfo.coins;
             earningRate = this.getEarningRate();
-            subtext = `You need ${coinsNeeded.toString()} more coins. ${earningRate > 0 ? "Should take " + Math.ceil(coinsNeeded / earningRate).toString() + " more days!" : "Get to work!"}`
+            let days = Math.ceil(coinsNeeded / earningRate);
+            subtext = `You need ${coinsNeeded.toString()} more coin${coinsNeeded == 1 ? "" : "s"}. ${earningRate > 0 ? "Should take " + days.toString() + ` more day${days == 1 ? "" : "s"}!` : "Get to work!"}`
         }
         return (
             reward.purchasedBy.indexOf(this.props.userInfo._id) == -1 ?

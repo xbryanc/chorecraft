@@ -37,14 +37,14 @@ export default class Quests extends Component {
                                 let type = cur[1];
                                 let placeholder = cur[2];
                                 return (
-                                    <div className="form-group row questsCreateField">
-                                        <label className="col-sm-2" htmlFor={`quests${el}`}>{el}:</label>
+                                    <div className="form-group row">
+                                        <label className="col-sm-2 col-form-label questsCreateLabel" htmlFor={`quests${el}`}>{el}:</label>
                                         <input className="form-control col-sm-10" id={`quests${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState} placeholder={placeholder}></input>
                                     </div>
                                 );
                             })}
                             <div className="form-group row">
-                                <div className="col-sm-2 questsChildSelectionTitle">
+                                <div className="col-sm-2 questsCreateLabel">
                                     Explorers to embark:
                                 </div>
                                 <div className="col-sm-10 questsNameHolder">
