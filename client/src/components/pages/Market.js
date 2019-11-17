@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Reward from '../Reward';
 import '../../css/app.css';
 import '../../css/market.css';
 
@@ -46,42 +47,9 @@ export default class Market extends Component {
                         <h2 className="marketSection">Rewards</h2>
                         <div className="card-deck">
                             {this.state.rewards.map((reward, i) => {
-                                return (
-                                    reward.purchasedBy.indexOf(this.props.userInfo._id) == -1 ?
-                                        <div key={i.toString()} className="card">
-                                            <div className="card-body">
-                                                <h5 className="card-title">{reward.title}</h5>
-                                                <h6 className="card-subtitle mb-2 text-muted">Cost: {reward.cost}</h6>
-                                                <p className="card-text">{reward.description}</p>
-                                            </div>
-                                            <div className="card-footer">
-                                                {this.props.userInfo.isParent ?
-                                                    <div>
-                                                        <p className="card-text">Purchased by 
-                                                            {": " +
-                                                                (this.props.userInfo.children
-                                                                    .filter(child => reward.purchasedBy.indexOf(child._id) != -1)
-                                                                    .map(child => child.username)
-                                                                    .join(", "))
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                    :
-                                                    <div>
-                                                        {this.props.userInfo.coins >= reward.cost ?
-                                                            <button type="button" className="btn btn-secondary" onClick={this.purchaseReward(reward._id)}>Purchase!</button>
-                                                            : 
-                                                            <div>
-                                                                <button type="button" className="btn btn-secondary" disabled>Purchase!</button>
-                                                                <p className="card-text"><small className="text-muted">You need {reward.cost - this.props.userInfo.coins} more coins</small></p>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                }
-                                            </div>
-                                        </div>
-                                        : null
-                                );
+                                return (<Reward key={i.toString()} reward={reward}
+                                    onUpdate={() => { this.props.updateUserInfo(); this.getRewards(); }}
+                                    userInfo={this.props.userInfo} />);
                             })
                             }
                         </div>
@@ -132,20 +100,5 @@ export default class Market extends Component {
         .catch(err => {
             alert(err.response.data.message);
         });
-    }
-
-    purchaseReward = (rewardId) => {
-        return (e) => {
-            axios.post('/api/purchaseReward', {
-                rewardId: rewardId
-            })
-            .then(res => {
-                this.props.updateUserInfo();
-                this.getRewards();
-            })
-            .catch(err => {
-                alert(err.response.data.message);
-            });
-        };
     }
 }

@@ -137,6 +137,30 @@ router.post('/purchaseReward',
     }
 );
 
+router.post('/addToWishlist',
+    connect.ensureLoggedIn(),
+    function(req, res) {
+        if (!req.user.isParent) {
+            Child.findById(req.user._id, function (err, user) {
+                if (user.wishlist.indexOf(req.body.rewardId) != -1) {
+                    return res.status(400).send({ message: "Already added to wishlist" });
+                }
+                user.wishlist.push(req.body.rewardId);
+                Child.findByIdAndUpdate(req.user._id, user, () => {
+                    res.send("added!");
+                });
+            });
+            Reward.findById(req.body.rewardId, function(err, reward) {
+                if (reward.purchasedBy.indexOf(req.user._id) != -1) {
+                    return res.status(400).send({ message: "You have already purchased this reward." });
+                }
+            });
+        } else {
+            res.status(400).send({ message: "Quest Masters cannot add rewards to wishlist!" });
+        }
+    }
+)
+
 router.get('/echo', function(req, res) {
     res.send({message: req.query.message});
 });
@@ -220,7 +244,7 @@ router.get('/whoami', function(req, res) {
             Child.findOne({_id: req.user._id}, (_, child) => {
                 Parent.findOne({_id: child.parentId}, (_, parent) => {
                     Child.find({ _id: { $in: parent.childrenId } }, (_, children) => {
-                        let siblingInfo = children
+                        const siblingInfo = children
                             .filter(c => c._id != req.user._id)
                             .map(c => ({
                                 _id: c._id,
@@ -228,16 +252,22 @@ router.get('/whoami', function(req, res) {
                                 exp: c.exp,
                                 coins: c.coins,     
                             }));
-                        res.send({
-                            _id: req.user._id,
-                            username: req.user.username,
-                            isParent: false,
-                            parentId: child.parentId,
-                            parentName: parent.username,
-                            exp: child.exp,
-                            coins: child.coins,
-                            siblings: siblingInfo,
-                        });
+                        Reward.find({ _id : { $in: child.wishlist } }, (_, rewards) => {
+                            const wishlistInfo = rewards
+                                .filter(r => r.purchasedBy.indexOf(req.user._id) === -1);
+                            res.send({
+                                _id: req.user._id,
+                                username: req.user.username,
+                                isParent: false,
+                                parentId: child.parentId,
+                                parentName: parent.username,
+                                exp: child.exp,
+                                coins: child.coins,
+                                wishlistIds: child.wishlist,
+                                wishlist: wishlistInfo,
+                                siblings: siblingInfo,
+                            });
+                        })
                     });
                 });
             });

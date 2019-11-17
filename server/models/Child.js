@@ -9,6 +9,7 @@ const ChildSchema = new mongoose.Schema ({
     coins: { type: Number, default: 0 },
     isParent: Boolean,
     parentId: mongoose.Schema.Types.ObjectId,
+    wishlist: [mongoose.Schema.Types.ObjectId]
 });
 
 ChildSchema.pre('save', function() {
