@@ -7,8 +7,29 @@ const Parent = require('../models/Parent');
 const Child = require('../models/Child');
 const Quest = require('../models/Quest');
 const Reward = require('../models/Reward');
+const HistoryEntry = require('../models/HistoryEntry');
 
 const router = express.Router();
+
+async function logTransaction(data) {
+    let timestamp = (new Date()).getTime();
+        const newHistoryEntry = new HistoryEntry({
+            childId: data.childId,
+            questId: data.questId,
+            rewardId: data.rewardId,
+            title: data.title,
+            description: data.description,
+            isQuest: data.isQuest,
+            oldExp: data.oldExp,
+            newExp: data.newExp,
+            oldCoins: data.oldCoins,
+            newCoins: data.newCoins,
+            timestamp: timestamp,
+        });
+        newHistoryEntry.save((err, entry) => {
+            if (err) console.log(err);
+        });
+}
 
 router.get('/getQuests',
     function(req, res) {
@@ -16,7 +37,7 @@ router.get('/getQuests',
             res.send([]);
         } else {
             let param = req.user.isParent ? "parentId" : "childrenId";
-            Quest.find({[param]: req.user._id}, (err, quests) => {
+            Quest.find({[param]: req.user._id, childrenId: {$ne: []}}, (err, quests) => {
                 res.send(quests || []);
             });
         }
@@ -54,19 +75,24 @@ router.post('/completeQuest',
                 let questChildren = quest.childrenId;
                 if (questChildren.includes(childId)) {
                     Child.findOne({_id: childId}, (_, child) => {
+                        logTransaction({
+                            childId: childId,
+                            questId: questId,
+                            title: "Completed " + quest.title,
+                            description: quest.description,
+                            isQuest: true,
+                            oldExp: child.exp,
+                            newExp: child.exp + quest.exp,
+                            oldCoins: child.coins,
+                            newCoins: child.coins + quest.coins,
+                        });
                         child.exp += quest.exp;
                         child.coins += quest.coins;
                         Child.findOneAndUpdate({_id: childId}, child, () => {
                             questChildren.splice(questChildren.indexOf(childId), 1);
-                            if (!questChildren.length) {
-                                Quest.findOneAndRemove({_id: questId}, () => {
-                                    res.send({done: true});
-                                });
-                            } else {
-                                Quest.findOneAndUpdate({_id: questId}, {childrenId: questChildren}, () => {
-                                    res.send({done: true});
-                                });
-                            }
+                            Quest.findOneAndUpdate({_id: questId}, {childrenId: questChildren}, () => {
+                                res.send({done: true});
+                            });
                         });
                     });
                 } else {
@@ -122,6 +148,17 @@ router.post('/purchaseReward',
                     if (user.coins < reward.cost) {
                         return res.status(400).send({ message: "Not enough coins :'(" });
                     }
+                    logTransaction({
+                        childId: user._id,
+                        rewardId: reward._id,
+                        title: "Purchased " + reward.title,
+                        description: reward.description,
+                        isQuest: false,
+                        oldExp: user.exp,
+                        newExp: user.exp,
+                        oldCoins: user.coins,
+                        newCoins: user.coins - reward.cost,
+                    });
                     user.coins -= reward.cost;
                     reward.purchasedBy.push(user._id);
                     Reward.findByIdAndUpdate(reward._id, reward, () => {
@@ -237,6 +274,7 @@ router.get('/whoami', function(req, res) {
                         username: req.user.username,
                         isParent: true,
                         children: childInfo,
+                        transactions: [],
                     });
                 });
             })
@@ -255,17 +293,20 @@ router.get('/whoami', function(req, res) {
                         Reward.find({ _id : { $in: child.wishlist } }, (_, rewards) => {
                             const wishlistInfo = rewards
                                 .filter(r => r.purchasedBy.indexOf(req.user._id) === -1);
-                            res.send({
-                                _id: req.user._id,
-                                username: req.user.username,
-                                isParent: false,
-                                parentId: child.parentId,
-                                parentName: parent.username,
-                                exp: child.exp,
-                                coins: child.coins,
-                                wishlistIds: child.wishlist,
-                                wishlist: wishlistInfo,
-                                siblings: siblingInfo,
+                            HistoryEntry.find({childId: req.user._id}, (_, entries) => {
+                                res.send({
+                                    _id: req.user._id,
+                                    username: req.user.username,
+                                    isParent: false,
+                                    parentId: child.parentId,
+                                    parentName: parent.username,
+                                    exp: child.exp,
+                                    coins: child.coins,
+                                    wishlistIds: child.wishlist,
+                                    wishlist: wishlistInfo,
+                                    siblings: siblingInfo,
+                                    transactions: entries,
+                                });
                             });
                         })
                     });

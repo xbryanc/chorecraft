@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import Reward from '../Reward';
 import '../../css/app.css';
 import '../../css/profile.css';
-import { maxHeaderSize } from 'http';
 
 export default class Profile extends Component {
     constructor(props) {
@@ -33,7 +32,6 @@ export default class Profile extends Component {
             rank = this.props.userInfo.siblings.filter(s => s.exp > this.props.userInfo.exp).length + 1;
             place = rank.toString() + ["th", "st", "nd", "rd", "th"][Math.min(rank % 10, 4)];
         }
-        
         return (
             <div className="backgroundContainer">
                 <div className="pageTitle">
@@ -81,6 +79,39 @@ export default class Profile extends Component {
                         <h2>Wishlist</h2>
                             {this.props.userInfo.wishlist.map(reward =>
                                 <Reward reward={reward} onUpdate={this.props.updateUserInfo} userInfo={this.props.userInfo} />)}
+                        <h2>History</h2>
+                        <div className="card-deck">
+                            {this.props.userInfo.transactions.map(t => {
+                                let arrow = (
+                                    <img style={{"width": "10px", "margin-bottom": "2px"}} src="/media/rightarrow.jpg" />
+                                );
+                                let coinIcon = (
+                                    <img style={{"width": "10px", "margin-bottom": "2px"}} src="/media/coins.png" />
+                                );
+                                let time = new Date(t.timestamp);
+                                return (
+                                    <div className="card">
+                                        <div className="card-body">
+                                            <h5 className="card-title">
+                                                {t.title}
+                                            </h5>
+                                            <p className="card-text">
+                                                {t.description}
+                                            </p>
+                                        </div>
+                                        <div className="card-footer">
+                                            <p>
+                                                {t.oldExp} EXP {arrow} {t.newExp} EXP
+                                                <br />
+                                                {t.oldCoins} {coinIcon} {arrow} {t.newCoins} {coinIcon}
+                                            </p>
+                                            <small class="text-muted">
+                                                On {time.toLocaleString("en-US")}
+                                            </small>
+                                        </div>
+                                    </div>
+                            )})}
+                        </div>
                     </div>
                 )}
                 <img src="http://2.bp.blogspot.com/-cVAAIiL86ek/VMuM-EzBpEI/AAAAAAAAAB0/7UeEgpYfeCg/s1600/Clash_Troops.png"
