@@ -6,6 +6,7 @@ const passport = require('../passport');
 const Parent = require('../models/Parent');
 const Child = require('../models/Child');
 const Quest = require('../models/Quest');
+const Reward = require('../models/Reward');
 
 const router = express.Router();
 
@@ -62,7 +63,65 @@ router.post('/completeQuest',
             res.status(403);
             res.send({done: false});
         }
-});
+    }
+);
+
+router.get('/getRewards',
+    connect.ensureLoggedIn(),
+    function(req, res) {
+        const parentId = req.user.isParent ? req.user._id : req.user.parentId;
+        Reward.find({ parentId : parentId }, function(err, rewards) {
+            res.send(rewards || []);
+        });
+    }
+);
+
+router.post('/createReward',
+    connect.ensureLoggedIn(),
+    function(req, res) {
+        if (req.user.isParent) {
+            const newReward = new Reward({
+                title: req.body.title,
+                description: req.body.description,
+                cost: req.body.cost,
+                parentId: req.user._id,
+                purchasedBy: []
+            });
+            newReward.save(function(err, reward) {
+                res.send("done");
+            });
+        } else {
+            res.status(400).send({ message: "Explorers cannot create rewards!" });
+        }
+    }
+);
+
+router.post('/purchaseReward',
+    connect.ensureLoggedIn(),
+    function(req, res) {
+        if (!req.user.isParent) {
+            Reward.findById(req.body.rewardId, function(err, reward) {
+                if (reward.purchasedBy.indexOf(req.user._id) != -1) {
+                    return res.status(400).send({ message: "You have already purchased this reward." });
+                }
+                Child.findById(req.user._id, function(err, user) {
+                    if (user.coins < reward.cost) {
+                        return res.status(400).send({ message: "Not enough coins :'(" });
+                    }
+                    user.coins -= reward.cost;
+                    reward.purchasedBy.push(user._id);
+                    Reward.findByIdAndUpdate(reward._id, reward, () => {
+                        Child.findByIdAndUpdate(user._id, user, () => {
+                            res.send("purchased!");
+                        });
+                    });
+                });
+            });
+        } else {
+            res.status(400).send({ message: "Quest Masters cannot purchase rewards!" });
+        }
+    }
+);
 
 router.get('/echo', function(req, res) {
     res.send({message: req.query.message});
@@ -136,6 +195,7 @@ router.get('/whoami', function(req, res) {
                         coins: c.coins,
                     }));
                     res.send({
+                        _id: req.user._id,
                         username: req.user.username,
                         isParent: true,
                         children: childInfo,
@@ -146,6 +206,7 @@ router.get('/whoami', function(req, res) {
             Child.findOne({_id: req.user._id}, (_, child) => {
                 Parent.findOne({_id: child.parentId}, (_, parent) => {
                     res.send({
+                        _id: req.user._id,
                         username: req.user.username,
                         isParent: false,
                         parentId: child.parentId,
