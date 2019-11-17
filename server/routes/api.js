@@ -79,6 +79,29 @@ router.post('/signup', function(req, res, next) {
     })(req, res, next);
 });
 
+router.post('/add',
+    connect.ensureLoggedIn(),
+    function(req, res, next) {
+        if(!req.user.isParent) {
+            return res.status(403).send({ message: "not parent" });
+        }
+        const username = req.body.username;
+        const password = req.body.password;
+        Child.findOne({ username : username}, function(err, user) {
+            if (err) { return next(err); }
+            if (user) { return res.status(400).send({ message: "username already in use." }); }
+            let newChild = new Child();
+            newChild.username = username;
+            newChild.password = password;
+            newChild.parentId = req.user._id;
+            newChild.save(function(err, child) {
+                if(err) { return next(err); }
+                return res.send({ message: "success" });
+            })
+        })
+    }
+);
+
 router.post('/login', function(req, res, next) {
     passport.authenticate('login', function(e, user, info) {
         if(e) return next(e);
