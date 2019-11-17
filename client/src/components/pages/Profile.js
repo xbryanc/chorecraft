@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import '../../css/app.css';
 import '../../css/profile.css';
+import { maxHeaderSize } from 'http';
 
 export default class Profile extends Component {
     constructor(props) {
@@ -24,6 +25,13 @@ export default class Profile extends Component {
                 </div>
             )
         }
+        let rank = 0;
+        let place = "";
+        if (!this.props.userInfo.isParent) {
+            rank = this.props.userInfo.siblings.filter(s => s.exp > this.props.userInfo.exp).length + 1;
+            place = rank.toString() + ["th", "st", "nd", "rd", "th"][Math.min(rank % 10, 4)];
+        }
+        
         return (
             <div className="backgroundContainer">
                 <div className="pageTitle">
@@ -32,34 +40,46 @@ export default class Profile extends Component {
                 {this.props.userInfo.isParent ?
                 (
                     <div>
-                        Current explorers:
-                        <br />
+                        <h2>Your Clan</h2>
                         {this.props.userInfo.children.map(el =>
                             <p>
                                 {el.username}: {el.exp} EXP, {el.coins} coins
                             </p>
                         )}
-                        None. Register an explorer!
-                        <div>
-                            <label htmlFor="username">Username:</label>
-                            <input id="username" name="username" type="text" onChange={this.handleChange} />
+                        {this.props.userInfo.children.length ? null : <p>None yet - enlist an explorer below!</p>}
+                        <br />
+                        <h2>Enlist a New Explorer</h2>
+                        <div className="form-group row">
+                            <label htmlFor="username" className="col-sm-2 col-form-label">Username:</label>
+                            <input id="username" className="col-sm-10 form-control" name="username" type="text" onChange={this.handleChange} />
                         </div>
-                        <div>
-                            <label htmlFor="password">Password:</label>
-                            <input id="password" name="password" type="password" onChange={this.handleChange} />
+                        <div className="form-group row">
+                            <label htmlFor="password" className="col-sm-2 col-form-label">Password:</label>
+                            <input id="password" className="col-sm-10 form-control" name="password" type="password" onChange={this.handleChange} />
                         </div>
-                        <div>
-                            <label htmlFor="password2">Confirm password:</label>
-                            <input id="password2" name="password2" type="password" onChange={this.handleChange} />
+                        <div className="form-group row">
+                            <label htmlFor="password2" className="col-sm-2 col-form-label">Confirm password:</label>
+                            <input id="password2" className="col-sm-10 form-control" name="password2" type="password" onChange={this.handleChange} />
                         </div>
                         <button type="button" class="btn btn-secondary" onClick={this.addChild}>Register Explorer</button>
                     </div>
                 )
                 :
                 (
-                    <p>
-                        You've gained {this.props.userInfo.exp} EXP! You also have {this.props.userInfo.coins} coins to spend!
-                    </p>
+                    <div>
+                        <h2>Stats</h2>
+                        <p>
+                            You've gained <strong>{this.props.userInfo.exp}</strong> EXP! You also have <strong>{this.props.userInfo.coins}</strong> coins to spend!
+                        </p>
+                        <h2>Your Clan</h2>
+                        <p>
+                            {this.props.userInfo.username} (you): {this.props.userInfo.exp} EXP
+                        </p>
+                        {this.props.userInfo.siblings.map(s => (<p>{s.username}: {s.exp} EXP</p>))}
+                        <p>
+                            You are in <strong>{place}</strong> place!
+                        </p>
+                        </div>
                 )}
             </div>
         )

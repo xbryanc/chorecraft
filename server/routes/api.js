@@ -205,14 +205,25 @@ router.get('/whoami', function(req, res) {
         } else {
             Child.findOne({_id: req.user._id}, (_, child) => {
                 Parent.findOne({_id: child.parentId}, (_, parent) => {
-                    res.send({
-                        _id: req.user._id,
-                        username: req.user.username,
-                        isParent: false,
-                        parentId: child.parentId,
-                        parentName: parent.username,
-                        exp: child.exp,
-                        coins: child.coins,
+                    Child.find({ _id: { $in: parent.childrenId } }, (_, children) => {
+                        let siblingInfo = children
+                            .filter(c => c._id != req.user._id)
+                            .map(c => ({
+                                _id: c._id,
+                                username: c.username,
+                                exp: c.exp,
+                                coins: c.coins,     
+                            }));
+                        res.send({
+                            _id: req.user._id,
+                            username: req.user.username,
+                            isParent: false,
+                            parentId: child.parentId,
+                            parentName: parent.username,
+                            exp: child.exp,
+                            coins: child.coins,
+                            siblings: siblingInfo,
+                        });
                     });
                 });
             });

@@ -42,7 +42,7 @@ export default class Market extends Component {
                             </div>
                             : <h2>Coins: {this.props.userInfo.coins}</h2>
                         }
-                        <br></br>
+                        <br />
                         <h2>Rewards</h2>
                         <div className="card-deck">
                             {this.state.rewards.map((reward, i) => {
