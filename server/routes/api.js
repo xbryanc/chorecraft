@@ -15,7 +15,7 @@ router.get('/getQuests',
             res.send([]);
         } else {
             let param = req.user.isParent ? "parentId" : "childrenId";
-            Quest.find({[param]: req.user._id}, quests => {
+            Quest.find({[param]: req.user._id}, (err, quests) => {
                 res.send(quests || []);
             });
         }
@@ -49,11 +49,11 @@ router.post('/completeQuest',
         if (req.user.isParent) {
             const questId = req.body.quest;
             const childId = req.body.child;
-            Quest.findOne({_id: questId}, quest => {
-                Child.findOne({_id: childId}, child => {
+            Quest.findOne({_id: questId}, (_, quest) => {
+                Child.findOne({_id: childId}, (_, child) => {
                     child.exp += quest.exp;
                     child.coins += quest.coins;
-                    Child.findOneAndUpdate({_id: childId}, child, _ => {
+                    Child.findOneAndUpdate({_id: childId}, child, () => {
                         res.send({done: true});
                     })
                 });
@@ -89,15 +89,21 @@ router.post('/add',
         const password = req.body.password;
         Child.findOne({ username : username}, function(err, user) {
             if (err) { return next(err); }
-            if (user) { return res.status(400).send({ message: "username already in use." }); }
+            if (user) { return res.send({ message: "username already in use." }); }
             let newChild = new Child();
             newChild.username = username;
             newChild.password = password;
             newChild.parentId = req.user._id;
             newChild.save(function(err, child) {
                 if(err) { return next(err); }
-                return res.send({ message: "success" });
-            })
+                Parent.findOne({_id: req.user._id}, (_, parent) => {
+                    let childrenId = parent.childrenId;
+                    childrenId.push(child._id);
+                    Parent.findOneAndUpdate({_id: req.user._id}, {childrenId: childrenId}, function() {
+                        return res.send({ message: "success" });
+                    });
+                });
+            });
         })
     }
 );
@@ -121,25 +127,34 @@ router.get('/logout', function(req, res) {
 router.get('/whoami', function(req, res) {
     if (req.user) {
         if (req.user.isParent) {
-            Child.find({_id: { $all: req.user.childrenId }}, children => {
-                let childNames = children ? children.map(c => c.username) : [];
-                res.send({
-                    username: req.user.username,
-                    isParent: true,
-                    children: req.user.childrenId,
-                    childNames: childNames,
+            Parent.findOne({_id: req.user._id}, (_, parent) => {
+                Child.find({_id: { $in: parent.childrenId }}, (_, children) => {
+                    let childNames = children.map(c => c.username)
+                    res.send({
+                        username: req.user.username,
+                        isParent: true,
+                        children: parent.childrenId,
+                        childNames: childNames,
+                    });
                 });
-            });
+            })
         } else {
-            Child.find({_id: req.user._id}, child => {
-                Parent.find({_id: child.parentId}, parent => {
+            Child.findOne({_id: req.user._id}, (_, child) => {
+                if (!child) {
                     res.send({
                         username: req.user.username,
                         isParent: false,
-                        parentId: child.parentId,
-                        parentName: parent.username,
                     });
-                })
+                } else {
+                    Parent.findOne({_id: child.parentId}, (_, parent) => {
+                        res.send({
+                            username: req.user.username,
+                            isParent: false,
+                            parentId: child.parentId,
+                            parentName: parent.username,
+                        });
+                    });
+                }
             });
         }
     } else {

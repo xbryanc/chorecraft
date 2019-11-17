@@ -32,7 +32,7 @@ class App extends Component {
           <Route exact path="/parent/login" render={(props) => <Login {...props} isParent={true} /> } />
           <Route exact path="/child/login" render={(props) => <Login {...props} isParent={false} /> } />
           <Route exact path="/parent/signup" component={Signup} /> } />
-          <Route exact path="/quests" render={(props) => <Quests {...props} userInfo={this.state.userInfo} /> } />
+          <Route exact path="/quests" render={(props) => <Quests {...props} userInfo={this.state.userInfo} updateUserInfo={this.getUserInfo} /> } />
           <Route exact path="/market" render={(props) => <Market {...props} userInfo={this.state.userInfo} updateUserInfo={this.getUserInfo} /> } />
           <Route exact path="/profile" render={(props) => <Profile {...props} userInfo={this.state.userInfo} updateUserInfo={this.getUserInfo} /> } />
         </Switch>

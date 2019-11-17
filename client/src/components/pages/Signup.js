@@ -10,6 +10,7 @@ export default class Signup extends Component {
         this.state = {
             username: "",
             password: "",
+            password2: "",
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -24,7 +25,14 @@ export default class Signup extends Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
+    signupFormComplete = () => {
+        return this.state.username && this.state.password && this.state.password == this.state.password2;
+    }
+
     handleSignup() {
+        if (!this.signupFormComplete()) {
+            return;
+        }
         axios.post('/api/signup', {
             username: this.state.username,
             password: this.state.password,
@@ -48,6 +56,10 @@ export default class Signup extends Component {
                     <div>
                         <label>Password:</label>
                         <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
+                    </div>
+                    <div>
+                        <label>Confirm password:</label>
+                        <input type="password" name="password2" value={this.state.password2} onChange={this.handleChange} />
                     </div>
                     <button type="button" onClick={this.handleSignup}>Sign up</button>
                 </form>

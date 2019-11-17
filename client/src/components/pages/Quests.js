@@ -10,6 +10,7 @@ export default class Quests extends Component {
         this.state = {
             questChildren: new Set([]),
         };
+        this.props.updateUserInfo();
     }
 
     componentDidMount() {
@@ -20,7 +21,7 @@ export default class Quests extends Component {
     render() {
         return (
             <div>
-                <div className="questsTitle">
+                <div className="questsHeader">
                     Quests
                 </div>
                 {this.props.userInfo.isParent ?
@@ -35,19 +36,19 @@ export default class Quests extends Component {
                                 let type = cur[1];
                                 return (
                                     <div className="questsCreateField">
-                                        <label htmlFor={`quests${el}`}>{el}</label>
+                                        <label htmlFor={`quests${el}`}>{el}:</label>
                                         <input id={`quests${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState}></input>
                                     </div>
                                 );
                             })}
                             <div className="questsChildSelectionTitle">
-                                Select your questers!
+                                Select your explorers!
                             </div>
                             {
-                                this.props.userInfo.childNames.forEach((el, ind) => (
+                                this.props.userInfo.children.map((el, ind) => (
                                     <div className="questsChildSelection">
-                                        <input type="checkbox" value={this.props.userInfo.children[ind]} onClick={this.updateQuestChildren} />
-                                        <p> el</p>
+                                        <input type="checkbox" value={el} onClick={this.updateQuestChildren} />
+                                        <p>{this.props.userInfo.childNames[ind]}</p>
                                     </div>
                                 ))
                             }
@@ -57,16 +58,29 @@ export default class Quests extends Component {
                     :
                     (
                         <div className="questsNeedChildren">
-                            You have no registered children. Please register them to create quests for them!
+                            You have no registered explorers. Please register them to create quests for them!
                         </div>
                     )
                 :
                 null
                 }
                 {this.state.quests && this.state.quests.length ?
-                <p>
-                    {this.state.quests}
-                </p>
+                this.state.quests.map(q => (
+                    <div className="questsQuest">
+                        <div className="questsTitle">
+                            {q.title}
+                        </div>
+                        <div className="questsDescription">
+                            {q.description}
+                        </div>
+                        <div className="questsExp">
+                            {q.exp} EXP
+                        </div>
+                        <div className="questsCoints">
+                            {q.coins} coins
+                        </div>
+                    </div>
+                ))
                 :
                 (
                     <div className="questsNoneFound">
