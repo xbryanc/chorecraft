@@ -37,7 +37,7 @@ export default class Market extends Component {
                                         </div>
                                     );
                                 })} 
-                                <button onClick={this.createReward}>Create!</button>
+                                <button type="button" className="btn btn-secondary" onClick={this.createReward}>Create!</button>
                             </div>
                             : <h2>Coins: {this.props.userInfo.coins}</h2>
                         }
@@ -62,7 +62,7 @@ export default class Market extends Component {
                                         :
                                         <div>
                                             {this.props.userInfo.coins >= reward.cost ?
-                                                <button onClick={this.purchaseReward(reward._id)}>Purchase!</button>
+                                                <button type="button" className="btn btn-secondary" onClick={this.purchaseReward(reward._id)}>Purchase!</button>
                                                 : <p>Sorry, you need {reward.cost - this.props.userInfo.coins} more coins</p>
                                             }
                                         </div>
