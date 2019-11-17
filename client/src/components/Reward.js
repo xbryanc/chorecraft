@@ -9,6 +9,8 @@ export default class Reward extends Component {
 
     render() {
         const reward = this.props.reward;
+        const coinsNeeded = reward.cost - this.props.userInfo.coins;
+        const daysNeeded = coinsNeeded / this.getEarningRate();
         return (
             reward.purchasedBy.indexOf(this.props.userInfo._id) == -1 ?
                 <div className="card">
@@ -31,25 +33,40 @@ export default class Reward extends Component {
                             </div>
                             :
                             <div>
-                                {this.props.userInfo.coins >= reward.cost ?
-                                    <button type="button" className="btn btn-secondary" onClick={this.purchaseReward(reward._id)}>Purchase!</button>
-                                    :
-                                    <div>
+                                <div className="btn-group">
+                                    {coinsNeeded <= 0 ?
+                                        <button type="button" className="btn btn-secondary" onClick={this.purchaseReward(reward._id)}>Purchase!</button>
+                                        :
                                         <button type="button" className="btn btn-secondary" disabled>Purchase!</button>
-                                        <p className="card-text"><small className="text-muted">You need {reward.cost - this.props.userInfo.coins} more coins</small></p>
-                                    </div>
-                                }
-                                {this.props.userInfo.wishlistIds.indexOf(reward._id) == -1 ?
-                                    <button type="button" className="btn btn-primary" onClick={this.addToWishlist(reward._id)}>Add to Wishlist</button>
-                                    :
-                                    <button type="button" className="btn btn-primary" disabled>Added to Wishlist</button>
-                                }
+                                    }
+                                    {this.props.userInfo.wishlistIds.indexOf(reward._id) == -1 ?
+                                        <button type="button" className="btn btn-primary" onClick={this.addToWishlist(reward._id)}>Add to Wishlist</button>
+                                        :
+                                        <button type="button" className="btn btn-primary" disabled>Added to Wishlist</button>
+                                    }
+                                </div>
+                                <div>
+                                    {coinsNeeded <= 0 ?
+                                        null
+                                        :
+                                        <div>
+                                            <p className="card-text"><small className="text-muted">
+                                                You need {reward.cost - this.props.userInfo.coins} more coins. Work at your current rate for {daysNeeded} more days!
+                                            </small></p>
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         }
                     </div>
                 </div>
                 : null
         );
+    }
+
+    getEarningRate = () => {
+        // TODO use history
+        return 2;
     }
 
     purchaseReward = (rewardId) => {
