@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import classNames from 'classnames';
 import '../../css/app.css';
 import '../../css/profile.css';
 
@@ -52,7 +53,7 @@ export default class Profile extends Component {
                             <label htmlFor="password2">Confirm password:</label>
                             <input id="password2" name="password2" type="password" onChange={this.handleChange} />
                         </div>
-                        <button type="button" class="btn btn-secondary" onClick={this.addChild}>Register Explorer</button>
+                        <button type="button" class={classNames("btn", "btn-secondary", {"disabled": !this.childFormComplete()})} onClick={this.addChild}>Register Explorer</button>
                     </div>
                 )
                 :

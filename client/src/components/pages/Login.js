@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import classNames from 'classnames';
 import '../../css/app.css';
 import '../../css/root.css';
 
@@ -26,6 +27,9 @@ export default class Login extends Component {
     }
 
     handleLogin() {
+        if (!this.formCompleted()) {
+            return;
+        }
         axios.post('/api/login', {
             username: this.state.username,
             password: this.state.password,
@@ -39,6 +43,10 @@ export default class Login extends Component {
         .catch((err) => {
             alert(err.response.data.message);
         })
+    }
+
+    formCompleted = () => {
+        return this.state.username && this.state.password;
     }
 
     render() {
@@ -56,7 +64,7 @@ export default class Login extends Component {
                         <label>Password:</label>
                         <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
                     </div>
-                    <button type="button" className="btn btn-secondary" onClick={this.handleLogin}>Log in</button>
+                    <button type="button" className={classNames("btn", "btn-secondary", {"disabled": !this.formCompleted()})} onClick={this.handleLogin}>Log in</button>
                 </form>
             </div>
         );

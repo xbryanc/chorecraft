@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import classNames from 'classnames';
 import '../../css/app.css';
 import '../../css/quests.css';
 
@@ -28,31 +29,34 @@ export default class Quests extends Component {
                     this.props.userInfo.children.length ?
                     (
                         <div>
-                            <div className="questsCreateTitle">
+                            <h2 className="questsSection">
                                 Craft a quest!
-                            </div>
-                            {[["Title", "text"], ["Description", "text"], ["Exp", "number"], ["Coins", "number"]].map(cur => {
+                            </h2>
+                            {[["Title", "text"], ["Description", "text"], ["EXP", "number"], ["Coins", "number"]].map(cur => {
                                 let el = cur[0];
                                 let type = cur[1];
                                 return (
-                                    <div className="questsCreateField">
-                                        <label htmlFor={`quests${el}`}>{el}:</label>
-                                        <input id={`quests${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState}></input>
+                                    <div className="form-group row questsCreateField">
+                                        <label className="col-sm-2" htmlFor={`quests${el}`}>{el}:</label>
+                                        <input className="form-control col-sm-10" id={`quests${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState}></input>
                                     </div>
                                 );
                             })}
-                            <div className="questsChildSelectionTitle">
-                                Select your explorers!
+                            <div className="form-group row">
+                                <div className="col-sm-2 questsChildSelectionTitle">
+                                    Explorers to embark:
+                                </div>
+                                <div className="col-sm-10">
+                                {
+                                    this.props.userInfo.children.map(el => (
+                                        <div className="questsChildSelection">
+                                            <label><input type="checkbox" value={el._id} onClick={this.updateQuestChildren} /> {el.username}</label>
+                                        </div>
+                                    ))
+                                }
+                                </div>
                             </div>
-                            {
-                                this.props.userInfo.children.map(el => (
-                                    <div className="questsChildSelection">
-                                        <input type="checkbox" value={el._id} onClick={this.updateQuestChildren} />
-                                        <p>{el.username}</p>
-                                    </div>
-                                ))
-                            }
-                            <button type="button" className="btn btn-secondary" onClick={this.createQuest}>Create!</button>
+                            <button type="button" className={classNames("btn", "btn-secondary", {"disabled": !this.completedQuestFields()})} onClick={this.createQuest}>Create!</button>
                         </div>
                     )
                     :
@@ -64,40 +68,46 @@ export default class Quests extends Component {
                 :
                 null
                 }
-                <div className="questsHeader">
-                    Open Quests
-                </div>
                 {this.state.quests && this.state.quests.length ?
-                this.state.quests.map(q => (
-                    <div className="questsQuest">
-                        <div className="questsTitle">
-                            {q.title}
-                        </div>
-                        <div className="questsDescription">
-                            {q.description}
-                        </div>
-                        <div className="questsExp">
-                            {q.exp} EXP
-                        </div>
-                        <div className="questsCoints">
-                            {q.coins} coins
-                        </div>
-                        {this.props.userInfo.isParent ?
-                        <div className="questsChildrenAssigned">
-                            {
-                                q.childrenId.map(el => (
-                                    <div>
-                                        <input type="radio" onClick={() => this.completeQuest(q._id, el)} />
-                                        <p>{this.getChildName(el)}</p>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        :
-                        null
-                        }
+                <div>
+                    <h2 className="questsSection">
+                        Open Quests
+                    </h2>
+                    <div className="card-deck">
+                        {this.state.quests.map(q => (
+                            <div className="card">
+                                <div className="card-body">
+                                    <h5 className="card-title questsQuestTitle">
+                                        {q.title}
+                                    </h5>
+                                    <p className="card-text questsQuestDescription">
+                                        {q.description}
+                                        {this.props.userInfo.isParent ?
+                                        <div className="questsChildrenAssigned">
+                                            {
+                                                q.childrenId.map(el => (
+                                                    <div>
+                                                        <label><input type="radio" onClick={() => this.completeQuest(q._id, el)} /> {this.getChildName(el)}</label>
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
+                                        :
+                                        null
+                                        }
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">
+                                        {q.exp} EXP
+                                        <br />
+                                        {q.coins} coins
+                                    </small>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                ))
+                </div>
                 :
                 (
                     <div className="questsNoneFound">
