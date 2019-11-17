@@ -50,17 +50,14 @@ export default class Profile extends Component {
                         {this.props.userInfo.children.length ? null : <p>None yet - enlist an explorer below!</p>}
                         <br />
                         <h2>Enlist a New Explorer</h2>
-                        <div className="form-group row">
-                            <label htmlFor="username" className="col-sm-2 col-form-label">Username:</label>
-                            <input id="username" className="col-sm-10 form-control" name="username" type="text" onChange={this.handleChange} />
+                        <div>
+                            <input id="username" className="accountField" name="username" type="text" onChange={this.handleChange} placeholder="Username" />
                         </div>
-                        <div className="form-group row">
-                            <label htmlFor="password" className="col-sm-2 col-form-label">Password:</label>
-                            <input id="password" className="col-sm-10 form-control" name="password" type="password" onChange={this.handleChange} />
+                        <div>
+                            <input id="password" className="accountField" name="password" type="password" onChange={this.handleChange} placeholder="Password" />
                         </div>
-                        <div className="form-group row">
-                            <label htmlFor="password2" className="col-sm-2 col-form-label">Confirm password:</label>
-                            <input id="password2" className="col-sm-10 form-control" name="password2" type="password" onChange={this.handleChange} />
+                        <div>
+                            <input id="password2" className="accountField" name="password2" type="password" onChange={this.handleChange} placeholder="Confirm password" />
                         </div>
                         <button type="button" class={classNames("btn", "btn-secondary", {"disabled": !this.childFormComplete()})} onClick={this.addChild}>Register Explorer</button>
                     </div>
