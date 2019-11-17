@@ -105,6 +105,7 @@ export default class Profile extends Component {
         })
         .then(res => {
             alert(res.data.message);
+            this.props.updateUserInfo();
         })
     }
 }
