@@ -79,6 +79,8 @@ export default class Profile extends Component {
                         </p>
                         </div>
                 )}
+                <img src="http://2.bp.blogspot.com/-cVAAIiL86ek/VMuM-EzBpEI/AAAAAAAAAB0/7UeEgpYfeCg/s1600/Clash_Troops.png"
+                    style={{ position: "fixed", bottom: "-20px", right: "-20px", zIndex: "-1", maxHeight: "50vh"}} />
             </div>
         )
     }

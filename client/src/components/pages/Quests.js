@@ -129,6 +129,10 @@ export default class Quests extends Component {
                         }
                     </div>
                 )}
+                <img src="https://www.paraesthesia.com/images/20160531_treasure.jpg"
+                    style={{ position: "fixed", bottom: "0", left: "0", zIndex: "-1"}} />
+                <img src="https://vignette.wikia.nocookie.net/villains/images/c/c5/Ogre.png/revision/latest?cb=20100701182712"
+                    style={{position: "fixed", bottom: "10px", right: "10px", maxHeight: "40vh", transform: "scaleX(-1)", zIndex: "-1"}}/>
             </div>
         )
     }

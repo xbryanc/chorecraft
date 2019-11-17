@@ -91,6 +91,10 @@ export default class Market extends Component {
                         Please log in to view the market.
                     </div>
                 }
+                <img src="https://www.hearthstonetopdecks.com/wp-content/uploads/2018/02/card-back-azeroth-is-burning-197x300.png"
+                    style={{ position: "fixed", bottom: "20px", left: "20px", zIndex: "-1", transform: "rotate(20deg)"}} />
+                <img src="https://wiki.teamfortress.com/w/images/thumb/f/f5/Towering_Pillar_of_Hats.png/250px-Towering_Pillar_of_Hats.png"
+                    style={{ position: "fixed", bottom: "0", right: "20px", zIndex: "-1"}} />
             </div>
         )
     }
