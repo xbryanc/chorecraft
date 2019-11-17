@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import classNames from 'classnames';
+import Reward from '../Reward';
 import '../../css/app.css';
 import '../../css/profile.css';
 import { maxHeaderSize } from 'http';
@@ -77,7 +78,10 @@ export default class Profile extends Component {
                         <p>
                             You are in <strong>{place}</strong> place!
                         </p>
-                        </div>
+                        <h2>Wishlist</h2>
+                            {this.props.userInfo.wishlist.map(reward =>
+                                <Reward reward={reward} onUpdate={this.props.updateUserInfo} userInfo={this.props.userInfo} />)}
+                    </div>
                 )}
                 <img src="http://2.bp.blogspot.com/-cVAAIiL86ek/VMuM-EzBpEI/AAAAAAAAAB0/7UeEgpYfeCg/s1600/Clash_Troops.png"
                     style={{ position: "fixed", bottom: "-20px", right: "-20px", zIndex: "-1", maxHeight: "50vh"}} />
