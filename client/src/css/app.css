@@ -10,5 +10,9 @@
 }
 
 .backgroundContainer {
-    padding: 100px 56px 100px 56px;
+    padding: 100px 20vw;
+}
+
+.card {
+    max-width: 25vw
 }
