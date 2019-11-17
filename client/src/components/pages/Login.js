@@ -44,6 +44,9 @@ export default class Login extends Component {
     render() {
         return (
             <div className="loginContainer backgroundContainer">
+                <div className="pageTitle">
+                    {this.props.isParent ? "Questmaster Login" : "Explorer Login"}
+                </div>
                 <form>
                     <div>
                         <label>Username:</label>
@@ -53,7 +56,7 @@ export default class Login extends Component {
                         <label>Password:</label>
                         <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
                     </div>
-                    <button type="button" onClick={this.handleLogin}>Log in</button>
+                    <button type="button" className="btn btn-secondary" onClick={this.handleLogin}>Log in</button>
                 </form>
             </div>
         );

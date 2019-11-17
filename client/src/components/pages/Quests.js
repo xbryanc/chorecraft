@@ -21,6 +21,9 @@ export default class Quests extends Component {
     render() {
         return (
             <div className="backgroundContainer">
+                <div className="pageTitle">
+                    Quests
+                </div>
                 {this.props.userInfo.isParent ?
                     this.props.userInfo.children.length ?
                     (
@@ -49,7 +52,7 @@ export default class Quests extends Component {
                                     </div>
                                 ))
                             }
-                            <button onClick={this.createQuest}>Create!</button>
+                            <button type="button" className="btn btn-secondary" onClick={this.createQuest}>Create!</button>
                         </div>
                     )
                     :
@@ -62,7 +65,7 @@ export default class Quests extends Component {
                 null
                 }
                 <div className="questsHeader">
-                    Quests
+                    Open Quests
                 </div>
                 {this.state.quests && this.state.quests.length ?
                 this.state.quests.map(q => (

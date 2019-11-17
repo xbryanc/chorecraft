@@ -16,7 +16,7 @@ export default class Root extends Component {
     render() {
         return (
             <div className="rootContainer backgroundContainer">
-                <div className="rootTitle">
+                <div className="pageTitle">
                     Welcome to Chorecraft!
                 </div>
                 <div className="rootSlideContainer">
@@ -44,14 +44,14 @@ export default class Root extends Component {
                 </div>
                 {Object.keys(this.props.userInfo).length ? null :
                 <div className="rootLoginButtons">
-                    <button type="button" className="btn btn-secondary rootLoginButton" onClick={() => this.redirect("/parent/signup")}>
-                        Questmaster Registration
+                    <button type="button" className="btn btn-secondary rootLoginButton" onClick={() => this.redirect("/child/login")}>
+                        Explorer Login
                     </button>
                     <button type="button" className="btn btn-secondary rootLoginButton" onClick={() => this.redirect("/parent/login")}>
                         Questmaster Login
                     </button>
-                    <button type="button" className="btn btn-secondary rootLoginButton" onClick={() => this.redirect("/child/login")}>
-                        Explorer Login
+                    <button type="button" className="btn btn-secondary rootLoginButton" onClick={() => this.redirect("/parent/signup")}>
+                        Questmaster Registration
                     </button>
                 </div>
                 }

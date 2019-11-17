@@ -48,6 +48,9 @@ export default class Signup extends Component {
     render() {
         return (
             <div className="signupContainer backgroundContainer">
+                <div className="pageTitle">
+                    Questmaster Registration
+                </div>
                 <form>
                     <div>
                         <label>Username:</label>
@@ -61,7 +64,7 @@ export default class Signup extends Component {
                         <label>Confirm password:</label>
                         <input type="password" name="password2" value={this.state.password2} onChange={this.handleChange} />
                     </div>
-                    <button type="button" onClick={this.handleSignup}>Sign up</button>
+                    <button type="button" className="btn btn-secondary" onClick={this.handleSignup}>Sign up</button>
                 </form>
             </div>
         );

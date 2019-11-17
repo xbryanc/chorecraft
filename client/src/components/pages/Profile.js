@@ -26,17 +26,20 @@ export default class Profile extends Component {
         }
         return (
             <div className="backgroundContainer">
-                Hi {this.props.userInfo.username}!
+                <div className="pageTitle">
+                    {this.props.userInfo.username}'s Profile
+                </div>
                 {this.props.userInfo.isParent ?
                 (
                     <div>
                         Current explorers:
-                            {this.props.userInfo.children.map(el =>
-                                <p>
-                                    {el.username}: {el.exp} EXP, {el.coins} coins
-                                </p>
-                            )}
-                        Register an explorer!
+                        <br />
+                        {this.props.userInfo.children.map(el =>
+                            <p>
+                                {el.username}: {el.exp} EXP, {el.coins} coins
+                            </p>
+                        )}
+                        None. Register an explorer!
                         <div>
                             <label htmlFor="username">Username:</label>
                             <input id="username" name="username" type="text" onChange={this.handleChange} />
@@ -49,7 +52,7 @@ export default class Profile extends Component {
                             <label htmlFor="password2">Confirm password:</label>
                             <input id="password2" name="password2" type="password" onChange={this.handleChange} />
                         </div>
-                        <button onClick={this.addChild}>Register Explorer</button>
+                        <button type="button" class="btn btn-secondary" onClick={this.addChild}>Register Explorer</button>
                     </div>
                 )
                 :
