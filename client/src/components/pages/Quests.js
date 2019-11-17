@@ -98,8 +98,8 @@ export default class Quests extends Component {
                                         }
                                     </p>
                                 </div>
-                                <div class="card-footer">
-                                    <small class="text-muted">
+                                <div className="card-footer">
+                                    <small className="text-muted">
                                         {q.exp} EXP
                                         <br />
                                         {q.coins} coin{q.coins == 1 ? "" : "s"}
