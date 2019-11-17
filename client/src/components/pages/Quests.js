@@ -102,7 +102,7 @@ export default class Quests extends Component {
                                     <small class="text-muted">
                                         {q.exp} EXP
                                         <br />
-                                        {q.coins} coins
+                                        {q.coins} coin{q.coins == 1 ? "" : "s"}
                                     </small>
                                 </div>
                             </div>

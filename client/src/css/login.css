@@ -1,3 +1,7 @@
 .loginContainer {
     text-align: center;
 }
+
+.loginImage {
+    width: 150px;
+}

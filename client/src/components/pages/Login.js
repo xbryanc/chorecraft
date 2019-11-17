@@ -64,6 +64,7 @@ export default class Login extends Component {
                     </div>
                     <button type="button" className={classNames("btn", "btn-secondary", {"disabled": !this.formCompleted()})} onClick={this.handleLogin}>Log in</button>
                 </form>
+                <img className="loginImage" src={this.props.isParent ? "/media/detective.png" : "/media/journey.png"} />
             </div>
         );
     }
