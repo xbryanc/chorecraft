@@ -47,7 +47,7 @@ export default class Signup extends Component {
 
     render() {
         return (
-            <div className="signupContainer">
+            <div className="signupContainer backgroundContainer">
                 <form>
                     <div>
                         <label>Username:</label>

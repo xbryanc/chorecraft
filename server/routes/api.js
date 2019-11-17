@@ -127,7 +127,7 @@ router.get('/echo', function(req, res) {
     res.send({message: req.query.message});
 });
 
-router.post('/signup', function(req, res, next) {
+router.post('/signup', connect.ensureLoggedOut(), function(req, res, next) {
     passport.authenticate('signup', function(e, user, info) {
         if(e) return next(e);
         if(info) return res.status(400).send(info);
@@ -167,7 +167,7 @@ router.post('/add',
     }
 );
 
-router.post('/login', function(req, res, next) {
+router.post('/login', connect.ensureLoggedOut(), function(req, res, next) {
     passport.authenticate('login', function(e, user, info) {
         if(e) return next(e);
         if(info) return res.status(400).send(info);
@@ -178,7 +178,7 @@ router.post('/login', function(req, res, next) {
     })(req, res, next);
 });
 
-router.get('/logout', function(req, res) {
+router.get('/logout', connect.ensureLoggedIn(), function(req, res) {
     req.logout();
     res.redirect('/');
 });
