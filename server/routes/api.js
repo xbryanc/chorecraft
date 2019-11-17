@@ -10,12 +10,15 @@ const Quest = require('../models/Quest');
 const router = express.Router();
 
 router.get('/getQuests',
-    connect.ensureLoggedIn(),
     function(req, res) {
-        let param = req.user.isParent ? "parentId" : "childrenId";
-        Quest.find({param: req.user._id}, quests => {
-            res.send(quests);
-        });
+        if (!req.user) {
+            res.send([]);
+        } else {
+            let param = req.user.isParent ? "parentId" : "childrenId";
+            Quest.find({[param]: req.user._id}, quests => {
+                res.send(quests);
+            });
+        }
 });
 
 router.post('/createQuest',
@@ -95,16 +98,14 @@ router.get('/logout', function(req, res) {
 router.get('/whoami', function(req, res) {
     if (req.user) {
         if (req.user.isParent) {
-            Parent.findOne({_id: req.user._id}, parent => {
-                Child.find({_id: { $all: parent.childrenId }}, children => {
-                    let childNames = children.map(c => c.username);
-                    reqs.send({
-                        username: req.user.username,
-                        isParent: true,
-                        child: childNames
-                    });
+            Child.find({_id: { $all: req.user.childrenId }}, children => {
+                let childNames = children ? children.map(c => c.username) : [];
+                res.send({
+                    username: req.user.username,
+                    isParent: true,
+                    child: childNames
                 });
-            })
+            });
         } else {
             res.send({
                 username: req.user.username,
@@ -112,7 +113,7 @@ router.get('/whoami', function(req, res) {
             });
         }
     } else {
-        res.send("not logged in");
+        res.send({});
     }
 });
 

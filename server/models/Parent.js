@@ -5,7 +5,12 @@ const mongoose = require('mongoose');
 const ParentSchema = new mongoose.Schema ({
     username: String,
     password: String,
+    isParent: Boolean,
     childrenId: [mongoose.Schema.Types.ObjectId],
+});
+
+ParentSchema.pre('save', function() {
+    this.isParent = true;
 });
 
 module.exports = mongoose.model('Parent', ParentSchema);
