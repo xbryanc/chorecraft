@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import classNames from 'classnames';
 import '../../css/app.css';
 import '../../css/profile.css';
 import { maxHeaderSize } from 'http';
@@ -61,7 +62,7 @@ export default class Profile extends Component {
                             <label htmlFor="password2" className="col-sm-2 col-form-label">Confirm password:</label>
                             <input id="password2" className="col-sm-10 form-control" name="password2" type="password" onChange={this.handleChange} />
                         </div>
-                        <button type="button" class="btn btn-secondary" onClick={this.addChild}>Register Explorer</button>
+                        <button type="button" class={classNames("btn", "btn-secondary", {"disabled": !this.childFormComplete()})} onClick={this.addChild}>Register Explorer</button>
                     </div>
                 )
                 :

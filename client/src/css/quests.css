@@ -1,11 +1,17 @@
-.questsHeader {
-    font-size: 50px;
-}
-
-.questsCreateTitle {
-    font-size: 50px;
-}
-
 .questsTitle {
     font-size: 30px;
+}
+
+.questsSection {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.questsNameHolder {
+    display: flex;
+    flex-direction: row;
+}
+
+.questsName {
+    margin-right: 10px;
 }

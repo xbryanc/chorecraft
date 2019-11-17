@@ -14,5 +14,16 @@
 }
 
 .card {
-    max-width: 25vw
+    max-width: 25vw;
+    min-width: 25vw;
+    margin: 10px;
+}
+
+.card-deck {
+    justify-content: center;
+}
+
+.accountField {
+    border-radius: 5px;
+    margin: 5px;
 }

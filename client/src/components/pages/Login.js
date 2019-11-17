@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import classNames from 'classnames';
 import '../../css/app.css';
-import '../../css/root.css';
+import '../../css/login.css';
 
 export default class Login extends Component {
     constructor(props) {
@@ -26,6 +27,9 @@ export default class Login extends Component {
     }
 
     handleLogin() {
+        if (!this.formCompleted()) {
+            return;
+        }
         axios.post('/api/login', {
             username: this.state.username,
             password: this.state.password,
@@ -41,6 +45,10 @@ export default class Login extends Component {
         })
     }
 
+    formCompleted = () => {
+        return this.state.username && this.state.password;
+    }
+
     render() {
         return (
             <div className="loginContainer backgroundContainer">
@@ -49,14 +57,12 @@ export default class Login extends Component {
                 </div>
                 <form>
                     <div>
-                        <label>Username:</label>
-                        <input type="text" name="username" value={this.state.username} onChange={this.handleChange} />
+                        <input className="accountField" type="text" name="username" value={this.state.username} onChange={this.handleChange} placeholder="Username" />
                     </div>
                     <div>
-                        <label>Password:</label>
-                        <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
+                        <input className="accountField" type="password" name="password" value={this.state.password} onChange={this.handleChange} placeholder="Password" />
                     </div>
-                    <button type="button" className="btn btn-secondary" onClick={this.handleLogin}>Log in</button>
+                    <button type="button" className={classNames("btn", "btn-secondary", {"disabled": !this.formCompleted()})} onClick={this.handleLogin}>Log in</button>
                 </form>
             </div>
         );

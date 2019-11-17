@@ -31,7 +31,7 @@ export default class Root extends Component {
                             ["/media/quest.jpg", "Browse quests to do."],
                             ["/media/coins.png", "Earn coins by completing quests."],
                             ["/media/redeem.jpeg", "Cash in coins for rewards!"],
-                            ["/media/exp.png", "Quests also reward exp for more benefits!"]
+                            ["/media/exp.jpeg", "Quests also reward EXP for more benefits!"]
                         ].map(slide =>
                         <div className="rootSlide">
                             <img className="rootSlideImage" src={slide[0]} />
