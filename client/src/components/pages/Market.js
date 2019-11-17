@@ -20,20 +20,21 @@ export default class Market extends Component {
 
     render() {
         return (
-            <div>
-                <h1>Market</h1>
+            <div className="backgroundContainer">
+                <h1 className="pageTitle">Market</h1>
                 {Object.keys(this.props.userInfo).length ?
                     <div>
                         {this.props.userInfo.isParent ?
                             <div>
-                                <h2>Create a Reward</h2>
-                                {[["Title", "text"], ["Description", "text"], ["Cost", "number"]].map((cur, i) => {
-                                    let el = cur[0];
-                                    let type = cur[1];
+                                <h2>Create a Reward!</h2>
+                                {[["Title", "text", "Cookie"], ["Description", "text", "If you give a mouse a cookie..."], ["Cost", "number", 2]].map((cur, i) => {
+                                    const el = cur[0];
+                                    const type = cur[1];
+                                    const placeholder = cur[2];
                                     return (
-                                        <div key={i.toString()}>
-                                            <label htmlFor={`reward${el}`}>{el}:</label>
-                                            <input id={`reward${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState}></input>
+                                        <div key={i.toString()} className="form-group row">
+                                            <label htmlFor={`reward${el}`} className="col-sm-2 col-form-label">{el}:</label>
+                                            <input id={`reward${el}`} className="col-sm-10 form-control" name={el.toLowerCase()} placeholder={placeholder} type={type} onChange={this.changeState}></input>
                                         </div>
                                     );
                                 })} 
@@ -41,37 +42,49 @@ export default class Market extends Component {
                             </div>
                             : <h2>Coins: {this.props.userInfo.coins}</h2>
                         }
-                        {this.state.rewards.map((reward, i) => {
-                            return (
-                                reward.purchasedBy.indexOf(this.props.userInfo._id) == -1 ?
-                                <div key={i.toString()}>
-                                    <h4>{reward.title}</h4>
-                                    <p>{reward.description}</p>
-                                    <p>Cost: {reward.cost}</p>
-                                    {this.props.userInfo.isParent ?
-                                        <div>
-                                            <h6>Purchased by</h6>
-                                            <ul>
-                                                {this.props.userInfo.children.map((child, ci) => {
-                                                    return (reward.purchasedBy.indexOf(child._id) != -1 
-                                                        ? <li key={ci.toString()}>{child.username}</li> 
-                                                        : null);
-                                                })}
-                                            </ul>
+                        <br></br>
+                        <h2>Rewards</h2>
+                        <div className="card-deck">
+                            {this.state.rewards.map((reward, i) => {
+                                return (
+                                    reward.purchasedBy.indexOf(this.props.userInfo._id) == -1 ?
+                                        <div key={i.toString()} className="card">
+                                            <div className="card-body">
+                                                <h5 className="card-title">{reward.title}</h5>
+                                                <h6 className="card-subtitle mb-2 text-muted">Cost: {reward.cost}</h6>
+                                                <p className="card-text">{reward.description}</p>
+                                            </div>
+                                            <div className="card-footer">
+                                                {this.props.userInfo.isParent ?
+                                                    <div>
+                                                        <p className="card-text">Purchased by 
+                                                            {": " +
+                                                                (this.props.userInfo.children
+                                                                    .filter(child => reward.purchasedBy.indexOf(child._id) != -1)
+                                                                    .map(child => child.username)
+                                                                    .join(", "))
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                    :
+                                                    <div>
+                                                        {this.props.userInfo.coins >= reward.cost ?
+                                                            <button type="button" className="btn btn-secondary" onClick={this.purchaseReward(reward._id)}>Purchase!</button>
+                                                            : 
+                                                            <div>
+                                                                <button type="button" className="btn btn-secondary" disabled>Purchase!</button>
+                                                                <p className="card-text"><small className="text-muted">You need {reward.cost - this.props.userInfo.coins} more coins</small></p>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
                                         </div>
-                                        :
-                                        <div>
-                                            {this.props.userInfo.coins >= reward.cost ?
-                                                <button type="button" className="btn btn-secondary" onClick={this.purchaseReward(reward._id)}>Purchase!</button>
-                                                : <p>Sorry, you need {reward.cost - this.props.userInfo.coins} more coins</p>
-                                            }
-                                        </div>
-                                    }
-                                </div>
-                                : null
-                            );
-                        })
-                        }
+                                        : null
+                                );
+                            })
+                            }
+                        </div>
                     </div>
                     :
                     <div>
