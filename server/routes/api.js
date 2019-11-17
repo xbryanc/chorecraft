@@ -36,8 +36,13 @@ router.get('/getQuests',
         if (!req.user) {
             res.send([]);
         } else {
-            let param = req.user.isParent ? "parentId" : "childrenId";
-            Quest.find({[param]: req.user._id, childrenId: {$ne: []}}, (err, quests) => {
+            let request = req.user.isParent ? {
+                parentId: req.user._id,
+                childrenId: {$ne: []},
+            } : {
+                childrenId: req.user._id,
+            };
+            Quest.find(request, (err, quests) => {
                 res.send(quests || []);
             });
         }
