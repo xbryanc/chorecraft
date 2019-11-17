@@ -42,16 +42,13 @@ export default class Profile extends Component {
                         )}
                         None. Register an explorer!
                         <div>
-                            <label htmlFor="username">Username:</label>
-                            <input id="username" name="username" type="text" onChange={this.handleChange} />
+                            <input className="accountField" id="username" name="username" type="text" onChange={this.handleChange} placeholder="Username" />
                         </div>
                         <div>
-                            <label htmlFor="password">Password:</label>
-                            <input id="password" name="password" type="password" onChange={this.handleChange} />
+                            <input className="accountField" id="password" name="password" type="password" onChange={this.handleChange} placeholder="Password" />
                         </div>
                         <div>
-                            <label htmlFor="password2">Confirm password:</label>
-                            <input id="password2" name="password2" type="password" onChange={this.handleChange} />
+                            <input className="accountField" id="password2" name="password2" type="password" onChange={this.handleChange} placeholder="Confirm password" />
                         </div>
                         <button type="button" class={classNames("btn", "btn-secondary", {"disabled": !this.childFormComplete()})} onClick={this.addChild}>Register Explorer</button>
                     </div>

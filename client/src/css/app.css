@@ -22,3 +22,8 @@
 .card-deck {
     justify-content: center;
 }
+
+.accountField {
+    border-radius: 5px;
+    margin: 5px;
+}

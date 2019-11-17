@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import classNames from 'classnames';
 import '../../css/app.css';
-import '../../css/root.css';
+import '../../css/signup.css';
 
 export default class Signup extends Component {
     constructor(props) {
@@ -54,16 +54,13 @@ export default class Signup extends Component {
                 </div>
                 <form>
                     <div>
-                        <label>Username:</label>
-                        <input type="text" name="username" value={this.state.username} onChange={this.handleChange} />
+                        <input className="accountField" type="text" name="username" value={this.state.username} onChange={this.handleChange} placeholder="Username" />
                     </div>
                     <div>
-                        <label>Password:</label>
-                        <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
+                        <input className="accountField" type="password" name="password" value={this.state.password} onChange={this.handleChange} placeholder="Password" />
                     </div>
                     <div>
-                        <label>Confirm password:</label>
-                        <input type="password" name="password2" value={this.state.password2} onChange={this.handleChange} />
+                        <input className="accountField" type="password" name="password2" value={this.state.password2} onChange={this.handleChange} placeholder="Confirm password" />
                     </div>
                     <button type="button" className={classNames("btn", "btn-secondary", {"disabled": !this.signupFormComplete()})} onClick={this.handleSignup}>Sign up</button>
                 </form>
