@@ -64,6 +64,7 @@ export default class Signup extends Component {
                     </div>
                     <button type="button" className={classNames("btn", "btn-secondary", {"disabled": !this.signupFormComplete()})} onClick={this.handleSignup}>Sign up</button>
                 </form>
+                <img className="signupImage" src="/media/detective.png" />
             </div>
         );
     }
