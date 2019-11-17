@@ -51,13 +51,27 @@ router.post('/completeQuest',
             const questId = req.body.quest;
             const childId = req.body.child;
             Quest.findOne({_id: questId}, (_, quest) => {
-                Child.findOne({_id: childId}, (_, child) => {
-                    child.exp += quest.exp;
-                    child.coins += quest.coins;
-                    Child.findOneAndUpdate({_id: childId}, child, () => {
-                        res.send({done: true});
-                    })
-                });
+                let questChildren = quest.childrenId;
+                if (questChildren.includes(childId)) {
+                    Child.findOne({_id: childId}, (_, child) => {
+                        child.exp += quest.exp;
+                        child.coins += quest.coins;
+                        Child.findOneAndUpdate({_id: childId}, child, () => {
+                            questChildren.splice(questChildren.indexOf(childId), 1);
+                            if (!questChildren.length) {
+                                Quest.findOneAndRemove({_id: questId}, () => {
+                                    res.send({done: true});
+                                });
+                            } else {
+                                Quest.findOneAndUpdate({_id: questId}, {childrenId: questChildren}, () => {
+                                    res.send({done: true});
+                                });
+                            }
+                        });
+                    });
+                } else {
+                    res.send({done: false});
+                }
             });
         } else {
             res.status(403);

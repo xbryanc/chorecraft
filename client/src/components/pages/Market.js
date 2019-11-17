@@ -26,7 +26,7 @@ export default class Market extends Component {
                     <div>
                         {this.props.userInfo.isParent ?
                             <div>
-                                <h2>Create a Reward!</h2>
+                                <h2 className="marketSection">Create a Reward!</h2>
                                 {[["Title", "text", "Cookie"], ["Description", "text", "If you give a mouse a cookie..."], ["Cost", "number", 2]].map((cur, i) => {
                                     const el = cur[0];
                                     const type = cur[1];
@@ -43,7 +43,7 @@ export default class Market extends Component {
                             : <h2>Coins: {this.props.userInfo.coins}</h2>
                         }
                         <br></br>
-                        <h2>Rewards</h2>
+                        <h2 className="marketSection">Rewards</h2>
                         <div className="card-deck">
                             {this.state.rewards.map((reward, i) => {
                                 return (

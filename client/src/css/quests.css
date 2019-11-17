@@ -6,3 +6,12 @@
     margin: 20px 0;
     text-align: center;
 }
+
+.questsNameHolder {
+    display: flex;
+    flex-direction: row;
+}
+
+.questsName {
+    margin-right: 10px;
+}

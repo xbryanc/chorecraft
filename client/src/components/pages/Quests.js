@@ -46,10 +46,10 @@ export default class Quests extends Component {
                                 <div className="col-sm-2 questsChildSelectionTitle">
                                     Explorers to embark:
                                 </div>
-                                <div className="col-sm-10">
+                                <div className="col-sm-10 questsNameHolder">
                                 {
                                     this.props.userInfo.children.map(el => (
-                                        <div className="questsChildSelection">
+                                        <div className="questsName">
                                             <label><input type="checkbox" value={el._id} onClick={this.updateQuestChildren} /> {el.username}</label>
                                         </div>
                                     ))
@@ -83,10 +83,10 @@ export default class Quests extends Component {
                                     <p className="card-text questsQuestDescription">
                                         {q.description}
                                         {this.props.userInfo.isParent ?
-                                        <div className="questsChildrenAssigned">
+                                        <div className="questsNameHolder">
                                             {
                                                 q.childrenId.map(el => (
-                                                    <div>
+                                                    <div className="questsName">
                                                         <label><input type="radio" onClick={() => this.completeQuest(q._id, el)} /> {this.getChildName(el)}</label>
                                                     </div>
                                                 ))
@@ -145,6 +145,7 @@ export default class Quests extends Component {
         .then(res => {
             if (res.data.done) {
                 alert("Completed quest!");
+                this.getQuests();
             } else {
                 alert("Could not complete quest at this time.");
             }
@@ -205,6 +206,7 @@ export default class Quests extends Component {
         .then(res => {
             if (res.data.done) {
                 alert("Success!");
+                this.getQuests();
             } else {
                 alert("Sorry, we were unable to create the quest. Please try again later.");
             }
