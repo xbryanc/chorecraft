@@ -21,7 +21,7 @@ export default class Market extends Component {
     render() {
         return (
             <div className="backgroundContainer">
-                <h1 className="pageTitle">Market</h1>
+                <div className="pageTitle">Market</div>
                 {Object.keys(this.props.userInfo).length ?
                     <div>
                         {this.props.userInfo.isParent ?
