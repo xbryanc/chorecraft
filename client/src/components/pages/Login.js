@@ -32,7 +32,6 @@ export default class Login extends Component {
             isParent: this.props.isParent,
         })
         .then(res => {
-            console.log(res);
             if (res.data.redirect) {
                 window.location = res.data.redirect;
             }

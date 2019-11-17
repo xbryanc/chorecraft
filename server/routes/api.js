@@ -16,7 +16,7 @@ router.get('/getQuests',
         } else {
             let param = req.user.isParent ? "parentId" : "childrenId";
             Quest.find({[param]: req.user._id}, quests => {
-                res.send(quests);
+                res.send(quests || []);
             });
         }
 });
@@ -74,7 +74,7 @@ router.post('/signup', function(req, res, next) {
         if(info) return res.status(400).send(info);
         req.login(user, function(e) {
             if(e) { return next(e); }
-            return res.status(200).send({ redirect: '/home' });
+            return res.status(200).send({ redirect: '/profile' });
         });
     })(req, res, next);
 });
@@ -108,7 +108,7 @@ router.post('/login', function(req, res, next) {
         if(info) return res.status(400).send(info);
         req.login(user, function(e) {
             if(e) { return next(e); }
-            return res.status(200).send({ redirect: '/home' });
+            return res.status(200).send({ redirect: '/profile' });
         });
     })(req, res, next);
 });
@@ -126,7 +126,8 @@ router.get('/whoami', function(req, res) {
                 res.send({
                     username: req.user.username,
                     isParent: true,
-                    child: childNames
+                    children: req.user.childrenId,
+                    childNames: childNames,
                 });
             });
         } else {

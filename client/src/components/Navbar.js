@@ -17,6 +17,7 @@ export default class Navbar extends Component {
             <div className="navbarContainer navbar">
                 <Link to="/quests">Quests</Link>
                 <Link to="/market">Market</Link>
+                <Link to="/profile">Profile</Link>
                 { this.state.loggedIn ? null : 
                     <div>
                         <Link to="/child/login">Explorer Log In</Link>

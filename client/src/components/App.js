@@ -7,6 +7,8 @@ import '../css/app.css';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Quests from './pages/Quests';
+import Profile from './pages/Profile';
+import Market from './pages/Market';
 
 class App extends Component {
   constructor(props) {
@@ -30,7 +32,9 @@ class App extends Component {
           <Route exact path="/parent/login" render={(props) => <Login {...props} isParent={true} /> } />
           <Route exact path="/child/login" render={(props) => <Login {...props} isParent={false} /> } />
           <Route exact path="/parent/signup" component={Signup} /> } />
-          <Route exact path="/quests" component={Quests} userInfo={this.state.userInfo} /> } />
+          <Route exact path="/quests" render={(props) => <Quests {...props} userInfo={this.state.userInfo} /> } />
+          <Route exact path="/market" render={(props) => <Market {...props} userInfo={this.state.userInfo} updateUserInfo={this.getUserInfo} /> } />
+          <Route exact path="/profile" render={(props) => <Profile {...props} userInfo={this.state.userInfo} updateUserInfo={this.getUserInfo} /> } />
         </Switch>
       </div>
     );

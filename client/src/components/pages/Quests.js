@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import '../../css/app.css';
 import '../../css/quests.css';
 
@@ -6,7 +7,9 @@ export default class Quests extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            questChildren: new Set([]),
+        };
     }
 
     componentDidMount() {
@@ -20,34 +23,34 @@ export default class Quests extends Component {
                 <div className="questsTitle">
                     Quests
                 </div>
-                {this.state.isParent ?
+                {this.props.userInfo.isParent && this.props.userInfo.children.length ?
                 (
                     <div>
                         <div className="questsCreateTitle">
                             Make a new quest!
                         </div>
-                        {[["Title", "text"], ["Description", "text"], ["Exp", "number"], ["Coins", "number"]].forEach(cur => {
+                        {[["Title", "text"], ["Description", "text"], ["Exp", "number"], ["Coins", "number"]].map(cur => {
                             let el = cur[0];
                             let type = cur[1];
                             return (
                                 <div className="questsCreateField">
                                     <label htmlFor={`quests${el}`}>{el}</label>
-                                    <input id={`quests${el}`} name={el.toLowerCase} type={type} onChange={this.changeState}></input>
+                                    <input id={`quests${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState}></input>
                                 </div>
                             );
                         })}
+                        <div className="questsChildSelectionTitle">
+                            Select your questers!
+                        </div>
                         {
-                            this.props.userInfo.children.forEach(el => (
-                                <div>
-                                    {el}
+                            this.props.userInfo.childNames.forEach((el, ind) => (
+                                <div className="questsChildSelection">
+                                    <input type="checkbox" value={this.props.userInfo.children[ind]} onClick={this.updateQuestChildren} />
+                                    <p> el</p>
                                 </div>
                             ))
                         }
-                        <div className="questsCreateField">
-                            <label htmlFor="questsTitle">Title</label>
-                            <input id="questsTitle"></input>
-                        </div>
-                        <button onClick={this.makeQuest}>Create!</button>
+                        <button onClick={this.createQuest}>Create!</button>
                     </div>
                 )
                 :
@@ -67,6 +70,18 @@ export default class Quests extends Component {
         )
     }
 
+    updateQuestChildren = (event) => {
+        let curSet = this.state.questChildren;
+        if (event.target.checked) {
+            curSet.add(event.target.value);
+        } else {
+            curSet.delete(event.target.value);
+        }
+        this.setState({
+            questChildren: curSet,
+        });
+    }
+
     changeState = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
@@ -81,7 +96,27 @@ export default class Quests extends Component {
         });
     }
 
-    makeQuest = () => {
-        console.log(this.state);
+    completedQuestFields = () => {
+        return this.state.title && this.state.description && this.state.exp && this.state.coins && this.state.questChildren.size;
+    }
+
+    createQuest = () => {
+        if (!this.completedQuestFields()) {
+            return;
+        }
+        axios.post('/api/createQuest', {
+            title: this.state.title,
+            description: this.state.description,
+            exp: this.state.exp,
+            coins: this.state.coins,
+            childrenId: this.state.questChildren,
+        })
+        .then(res => {
+            if (res.data.done) {
+                alert("Success!");
+            } else {
+                alert("Sorry, we were unable to create the quest. Please try again later.");
+            }
+        })
     }
 }

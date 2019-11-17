@@ -29,7 +29,6 @@ export default class Signup extends Component {
             username: this.state.username,
             password: this.state.password,
         }).then((res) => {
-            console.log(res);
             if (res.data.redirect) {
                 window.location = res.data.redirect;
             }
