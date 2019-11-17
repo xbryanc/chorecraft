@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const ChildSchema = new mongoose.Schema ({
     username: String,
     password: String,
-    exp: Number,
-    coins: Number,
+    exp: { type: Number, default: 0 },
+    coins: { type: Number, default: 0 },
     isParent: Boolean,
     parentId: mongoose.Schema.Types.ObjectId,
 });

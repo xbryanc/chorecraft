@@ -54,9 +54,9 @@ export default class Profile extends Component {
                 )
                 :
                 (
-                    <div>
-                        Hello
-                    </div>
+                    <p>
+                        You've gained {this.props.userInfo.exp} EXP! You also have {this.props.userInfo.coins} coins to spend!
+                    </p>
                 )}
             </div>
         )
