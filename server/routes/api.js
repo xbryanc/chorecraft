@@ -294,6 +294,13 @@ router.get('/whoami', function(req, res) {
                             const wishlistInfo = rewards
                                 .filter(r => r.purchasedBy.indexOf(req.user._id) === -1);
                             HistoryEntry.find({childId: req.user._id}, (_, entries) => {
+                                entries.sort((a, b) => {
+                                    let dateA = new Date(a.timestamp);
+                                    let dateB = new Date(b.timestamp);
+                                    if (dateA < dateB) return 1;
+                                    if (dateA > dateB) return -1;
+                                    return 0;
+                                });
                                 res.send({
                                     _id: req.user._id,
                                     username: req.user.username,

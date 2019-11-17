@@ -85,13 +85,16 @@ export default class Quests extends Component {
                                         {q.description}
                                         {this.props.userInfo.isParent ?
                                         <div className="questsNameHolder">
-                                            {
-                                                q.childrenId.map(el => (
-                                                    <div className="questsName">
-                                                        <label><input type="radio" onClick={() => this.completeQuest(q._id, el)} checked={false} /> {this.getChildName(el)}</label>
-                                                    </div>
-                                                ))
-                                            }
+                                            <label htmlFor="questsNames">Mark Complete:</label>
+                                            <div id="questsNames">
+                                                {
+                                                    q.childrenId.map(el => (
+                                                        <div className="questsName">
+                                                            <label><input type="radio" onClick={() => this.completeQuest(q._id, el)} checked={false} /> {this.getChildName(el)}</label>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
                                         </div>
                                         :
                                         null

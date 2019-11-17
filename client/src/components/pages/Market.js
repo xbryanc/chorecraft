@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import classNames from 'classnames';
 import Reward from '../Reward';
 import '../../css/app.css';
 import '../../css/market.css';
@@ -39,7 +40,7 @@ export default class Market extends Component {
                                         </div>
                                     );
                                 })} 
-                                <button type="button" className="btn btn-secondary" onClick={this.createReward}>Create!</button>
+                                <button type="button" className={classNames("btn", "btn-secondary", {"disabled": !this.completedRewardFields()})} onClick={this.createReward}>Create!</button>
                             </div>
                             : <h2>{this.props.userInfo.coins}<img className="profileCoins" src="/media/coins.png" /></h2>
                         }
