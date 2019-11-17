@@ -23,7 +23,7 @@ export default class Market extends Component {
             <div className="backgroundContainer">
                 <div className="pageTitle">Market</div>
                 {Object.keys(this.props.userInfo).length ?
-                    <div>
+                    <div className="marketContent">
                         {this.props.userInfo.isParent ?
                             <div>
                                 <h2 className="marketSection">Create a Reward!</h2>
@@ -40,7 +40,7 @@ export default class Market extends Component {
                                 })} 
                                 <button type="button" className="btn btn-secondary" onClick={this.createReward}>Create!</button>
                             </div>
-                            : <h2>Coins: {this.props.userInfo.coins}</h2>
+                            : <h2>{this.props.userInfo.coins}<img className="profileCoins" src="/media/coins.png" /></h2>
                         }
                         <br />
                         <h2 className="marketSection">Rewards</h2>
