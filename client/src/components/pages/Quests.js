@@ -32,13 +32,14 @@ export default class Quests extends Component {
                             <h2 className="questsSection">
                                 Craft a quest!
                             </h2>
-                            {[["Title", "text"], ["Description", "text"], ["EXP", "number"], ["Coins", "number"]].map(cur => {
+                            {[["Title", "text", "Dishes"], ["Description", "text", "Please do the dishes!"], ["EXP", "number", "10"], ["Coins", "number", "5"]].map(cur => {
                                 let el = cur[0];
                                 let type = cur[1];
+                                let placeholder = cur[2];
                                 return (
                                     <div className="form-group row questsCreateField">
                                         <label className="col-sm-2" htmlFor={`quests${el}`}>{el}:</label>
-                                        <input className="form-control col-sm-10" id={`quests${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState}></input>
+                                        <input className="form-control col-sm-10" id={`quests${el}`} name={el.toLowerCase()} type={type} onChange={this.changeState} placeholder={placeholder}></input>
                                     </div>
                                 );
                             })}
@@ -87,7 +88,7 @@ export default class Quests extends Component {
                                             {
                                                 q.childrenId.map(el => (
                                                     <div className="questsName">
-                                                        <label><input type="radio" onClick={() => this.completeQuest(q._id, el)} /> {this.getChildName(el)}</label>
+                                                        <label><input type="radio" onClick={() => this.completeQuest(q._id, el)} checked={false} /> {this.getChildName(el)}</label>
                                                     </div>
                                                 ))
                                             }
