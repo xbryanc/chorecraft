@@ -8,9 +8,16 @@ export default class Reward extends Component {
     }
 
     render() {
-        const reward = this.props.reward;
-        const coinsNeeded = reward.cost - this.props.userInfo.coins;
-        const daysNeeded = coinsNeeded / this.getEarningRate();
+        let reward = 0;
+        let coinsNeeded = 0;
+        let earningRate = 0;
+        let subtext = "";
+        if (!this.props.userInfo.isParent) {
+            reward = this.props.reward;
+            coinsNeeded = reward.cost - this.props.userInfo.coins;
+            earningRate = this.getEarningRate();
+            subtext = `You need ${coinsNeeded.toString()} more coins. ${earningRate > 0 ? "Should take " + Math.ceil(coinsNeeded / earningRate).toString() + " more days!" : "Get to work!"}`
+        }
         return (
             reward.purchasedBy.indexOf(this.props.userInfo._id) == -1 ?
                 <div className="card">
@@ -51,7 +58,7 @@ export default class Reward extends Component {
                                         :
                                         <div>
                                             <p className="card-text"><small className="text-muted">
-                                                You need {reward.cost - this.props.userInfo.coins} more coins. Work at your current rate for {daysNeeded} more days!
+                                                {subtext}
                                             </small></p>
                                         </div>
                                     }
@@ -65,8 +72,19 @@ export default class Reward extends Component {
     }
 
     getEarningRate = () => {
-        // TODO use history
-        return 2;
+        // get average amount earned over some number of days
+        const numDays = 7;
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - numDays);
+        let earned = 0;
+        if (this.props.userInfo.hasOwnProperty('transactions')) {
+            this.props.userInfo.transactions.forEach(t => {
+                if (t.timestamp >= cutoff && t.isQuest) {
+                    earned += t.newCoins - t.oldCoins;
+                }
+            });
+        }
+        return Math.ceil(earned / numDays);
     }
 
     purchaseReward = (rewardId) => {
